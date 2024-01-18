@@ -1,11 +1,11 @@
-from fastapi import FastAPI, HTTPException, Body
+from fastapi import FastAPI, HTTPException
 from .models import Member, RoleEnum, StatusEnum, GradeEnum
 from .utils import hash_password
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
-from config import DATABASE_URI
 from pydantic import BaseModel
 from datetime import datetime
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.orm import sessionmaker
+from config import ASYNC_DATABASE_URI
 
 # Pydantic 모델 정의 - 사용자 입력을 검증하기 위함
 class RegisterRequest(BaseModel):
@@ -13,13 +13,11 @@ class RegisterRequest(BaseModel):
     nickname: str
     password: str
 
-
 app = FastAPI()
-
-# 데이터베이스 연결 설정
-engine = create_engine(DATABASE_URI)
-Session = sessionmaker(bind=engine)
-
+# 비동기 데이터베이스 엔진 생성
+engine = create_async_engine(ASYNC_DATABASE_URI)
+# 비동기 세션 생성자
+AsyncSessionLocal = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
 
 @app.post('/register')
 async def register_member(request: RegisterRequest):
@@ -45,15 +43,14 @@ async def register_member(request: RegisterRequest):
         register_at=datetime.now()  # 현재 시간 설정
     )
 
-    # 데이터베이스에 삽입
-    session = Session()
-    try:
-        session.add(new_member)
-        session.commit()
-    except Exception as e:
-        session.rollback()
-        raise HTTPException(status_code=500, detail=f"회원가입 실패: {e}")
-    finally:
-        session.close()
+    async with AsyncSessionLocal() as session:
+        async with session.begin():
+            try:
+                session.add(new_member)
+                # 비동기 커밋
+                await session.commit()
+            except Exception as e:
+                await session.rollback()
+                raise HTTPException(status_code=500, detail=f"회원가입 실패: {e}")
 
     return {"message": "회원가입이 완료되었습니다."}
