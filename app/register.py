@@ -40,9 +40,8 @@ async def register_member(request: RegisterRequest):
         role=RoleEnum.MEMBER,  # 기본 역할 설정
         status=StatusEnum.ACTIVATE,  # 기본 상태 설정
         grade=GradeEnum.FREE,  # 기본 등급 설정
-        register_at=datetime.now()  # 현재 시간 설정
+        register_at= datetime.now()# 현재 시간 설정
     )
-
     async with AsyncSessionLocal() as session:
         async with session.begin():
             try:

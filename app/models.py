@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, Enum, ForeignKey
+from sqlalchemy import Column, Integer, String, DATETIME, Enum, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from .enums import RoleEnum, StatusEnum, GradeEnum, LogTypeEnum
@@ -15,7 +15,7 @@ class Member(Base):
     role = Column(Enum(RoleEnum), nullable=False)
     status = Column(Enum(StatusEnum), nullable=False)
     grade = Column(Enum(GradeEnum), nullable=False)
-    register_at = Column(Date, nullable=False)
+    register_at = Column(DATETIME, nullable=False)
 
     gree = relationship("Gree", back_populates="member")
     logs = relationship("Logs", back_populates="member")
@@ -30,7 +30,7 @@ class Gree(Base):
     prompt_character = Column(String(255))  # 대체될 수 있습니다
     prompt_age = Column(Integer)
     prompt_mbti = Column(String(255))  # 대체될 수 있습니다
-    register_at = Column(Date, nullable=False)
+    register_at = Column(DATETIME, nullable=False)
 
     member = relationship("Member", back_populates="gree")
     logs = relationship("Logs", back_populates="gree")
@@ -43,7 +43,7 @@ class Logs(Base):
     member_id = Column(Integer, ForeignKey('member.member_id'), nullable=False)
     log_type = Column(Enum(LogTypeEnum), nullable=False)
     talk = Column(String(255))
-    register_at = Column(Date, nullable=False)
+    register_at = Column(DATETIME, nullable=False)
 
     member = relationship("Member", back_populates="logs")
     gree = relationship("Gree", back_populates="logs")
