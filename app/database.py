@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
-from app.core.config import ASYNC_DATABASE_URI
+from core.config import ASYNC_DATABASE_URI
 
 # 비동기 엔진 생성
 async_engine = create_async_engine(ASYNC_DATABASE_URI)
