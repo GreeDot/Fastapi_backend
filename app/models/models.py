@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, DATETIME, Enum, ForeignKey
 from sqlalchemy.orm import relationship
-from app.models.enums import RoleEnum, StatusEnum, GradeEnum, LogTypeEnum
+from .enums import RoleEnum, StatusEnum, GradeEnum, LogTypeEnum
 from .base import Base
 
 class Member(Base):

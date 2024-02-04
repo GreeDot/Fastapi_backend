@@ -3,7 +3,7 @@ import jwt
 from fastapi.security import OAuth2PasswordBearer
 import bcrypt
 from fastapi import HTTPException, status
-from app.core.config import settings
+from .config import settings
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 

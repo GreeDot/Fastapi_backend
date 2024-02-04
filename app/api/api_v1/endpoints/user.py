@@ -4,9 +4,9 @@ from sqlalchemy.future import select
 from fastapi.security import OAuth2PasswordRequestForm
 from datetime import datetime
 from typing import Optional
-from app.models.models import Member, RoleEnum, StatusEnum, GradeEnum
-from app.core.security import hash_password, verify_password, create_access_token
-from app.database import get_db
+from models.models import Member, RoleEnum, StatusEnum, GradeEnum
+from core.security import hash_password, verify_password, create_access_token
+from database import get_db
 from pydantic import BaseModel
 
 router = APIRouter()
