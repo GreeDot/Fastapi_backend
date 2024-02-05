@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
-from app.models.base import Base
-from app.models.models import Member, Gree, Logs
-from app.core.config import DATABASE_URI
+from .base import Base
+from .models import Member, Gree, Logs
+from core.config import DATABASE_URI
 
 def init_db():
     engine = create_engine(DATABASE_URI)
