@@ -12,7 +12,6 @@ class UserCreate(BaseModel):
 
 # 사용자 업데이트 스키마
 class UserUpdate(BaseModel):
-    email: Optional[str] = None
     nickname: Optional[str] = None
     password: Optional[str] = None
 
