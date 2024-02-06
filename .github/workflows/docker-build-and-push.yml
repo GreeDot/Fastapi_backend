@@ -3,7 +3,7 @@ name: Build and Push Docker image
 on:
   push:
     branches:
-      - main 
+      - main
       - jh
 
 jobs:
@@ -34,3 +34,12 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           bash /home/ec2-user/update-docker.sh
+
+    - name: Cleanup Dangling Docker Images
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          docker images -q -f dangling=true | xargs docker rmi
