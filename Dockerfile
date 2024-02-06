@@ -1,6 +1,15 @@
 # Ubuntu 20.04를 기반 이미지로 사용
 FROM ubuntu:20.04
 
+# ARG로 빌드 시점 변수 정의
+ARG AWS_RDS_ID
+ARG AWS_RDS_PASSWORD
+
+# 환경변수로 설정하여 이미지 내에서 사용
+ENV AWS_RDS_ID=${AWS_RDS_ID}
+ENV AWS_RDS_PASSWORD=${AWS_RDS_PASSWORD}
+
+
 # 환경 변수 설정으로 인터랙티브 모드를 비활성화하여 패키지 설치 중 사용자 입력 대기를 방지
 ENV DEBIAN_FRONTEND=noninteractive
 
