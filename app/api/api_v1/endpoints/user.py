@@ -104,4 +104,4 @@ async def delete_user_endpoint(user_id: int, db: AsyncSession = Depends(get_db))
 # 테스트 라우터
 @router.get('/test')
 async def test():
-    return "hello test!"
+    return "hello test!!"
