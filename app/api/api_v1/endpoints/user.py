@@ -3,7 +3,8 @@ from jose.exceptions import JWTError
 from fastapi import APIRouter, HTTPException, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi.security import OAuth2PasswordRequestForm
-from datetime import datetime, timedelta
+from datetime import datetime
+from datetime import timedelta
 from sqlalchemy.future import select
 from typing import List, Optional
 from starlette.responses import JSONResponse
@@ -23,22 +24,22 @@ router = APIRouter()
 
 # Pydantic 모델 정의
 class RegisterRequest(BaseModel):
-    email: str
+    username: str
     nickname: str
     password: str
 
 
 # 이메일 중복 확인
-async def user_exists(email: str, db_session: AsyncSession) -> bool:
+async def user_exists(username: str, db_session: AsyncSession) -> bool:
     async with db_session as session:
-        result = await session.execute(select(Member).where(Member.email == email))
+        result = await session.execute(select(Member).where(Member.username == username))
         member = result.scalars().first()
         return member is not None
 
 ## 이메일이 일치한지 확인
-async def authenticate_user(email: str, password: str, db: AsyncSession) -> Optional[Member]:
+async def authenticate_user(username: str, password: str, db: AsyncSession) -> Optional[Member]:
     async with db as session:
-        result = await session.execute(select(Member).where(Member.email == email))
+        result = await session.execute(select(Member).where(Member.username == username))
         user = result.scalars().first()
         if user and verify_password(password, user.password):
             return user
@@ -60,7 +61,7 @@ async def get_current_user(db: AsyncSession = Depends(get_db), token: str = Depe
         raise credentials_exception
 
     async with db as session:
-        result = await session.execute(select(Member).filter(Member.email == username))
+        result = await session.execute(select(Member).filter(Member.username == username))
         user = result.scalars().first()
         if user is None:
             raise credentials_exception
@@ -70,11 +71,11 @@ async def get_current_user(db: AsyncSession = Depends(get_db), token: str = Depe
 # 회원가입 엔드포인트
 @router.post('/register')
 async def register_member(request: RegisterRequest, db: AsyncSession = Depends(get_db)):
-    if await user_exists(request.email, db):
+    if await user_exists(request.username, db):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="이미 존재하는 사용자입니다.")
     hashed_pwd = hash_password(request.password)
     new_member = Member(
-        email=request.email,
+        username=request.username,
         nickname=request.nickname,
         password=hashed_pwd,
         role=RoleEnum.MEMBER,
@@ -94,12 +95,12 @@ async def login_for_access_token(db: AsyncSession = Depends(get_db), form_data: 
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect email or password",
+            detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.email, "role": user.role},  # 사용자 역할 정보 추가
+        data={"sub": user.username, "role": user.role},  # 사용자 역할 정보 추가
         expires_delta=access_token_expires
     )
     return access_token

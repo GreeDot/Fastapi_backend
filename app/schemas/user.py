@@ -3,9 +3,10 @@ from datetime import datetime
 from typing import Optional
 from models.enums import RoleEnum, StatusEnum, GradeEnum
 
+
 # 사용자 생성 스키마
 class UserCreate(BaseModel):
-    email: str
+    username: str
     nickname: str
     password: str
 
@@ -15,14 +16,16 @@ class UserUpdate(BaseModel):
     nickname: Optional[str] = None
     password: Optional[str] = None
 
-#사용자 조회 스키마
+
+# 사용자 조회 스키마
 class User(BaseModel):
     id: int
-    email: str
+    username: str
     nickname: str
     role: RoleEnum
     status: StatusEnum
     grade: GradeEnum
+    refresh_token: Optional[str] = None
     register_at: datetime
 
     class Config:
