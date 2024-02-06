@@ -1,5 +1,5 @@
 # Ubuntu 20.04를 기반 이미지로 사용
-FROM ubuntu:20.04
+FROM python:3.10
 
 # 환경 변수 설정으로 인터랙티브 모드를 비활성화하여 패키지 설치 중 사용자 입력 대기를 방지
 ENV DEBIAN_FRONTEND=noninteractive

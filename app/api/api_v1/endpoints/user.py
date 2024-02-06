@@ -161,4 +161,4 @@ async def logout_user(db: AsyncSession = Depends(get_db), current_user: Member =
 # 테스트 라우터
 @router.get('/test')
 async def test():
-    return "hello test!!"
+    return "hello test!!!! 4트"
