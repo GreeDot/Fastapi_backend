@@ -1,5 +1,6 @@
 from pydantic.v1 import BaseSettings
 import secrets
+import os
 
 class Settings(BaseSettings):
     API_v1_STR: str = "/api/v1"
@@ -9,8 +10,8 @@ class Settings(BaseSettings):
 
 settings = Settings()
 
-AWS_RDS_ID = 'admin'
-AWS_RDS_PASSWORD = '63814110'
+AWS_RDS_ID = os.getenv("AWS_RDS_ID")
+AWS_RDS_PASSWORD = os.getenv("AWS_RDS_PASSWORD")
 
 # 데이터베이스 설정
 DATABASE_URI = f"mysql+pymysql://{AWS_RDS_ID}:{AWS_RDS_PASSWORD}@database-1.c3mqckcawht2.ap-southeast-2.rds.amazonaws.com/greedot"
