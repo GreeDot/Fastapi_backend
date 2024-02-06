@@ -100,3 +100,8 @@ async def delete_user_endpoint(user_id: int, db: AsyncSession = Depends(get_db))
         return JSONResponse(status_code=status.HTTP_200_OK, content={"message": "User successfully deleted"})
     else:
         raise HTTPException(status_code=404, detail="User not found")
+
+# 테스트 라우터
+@router.get('/test')
+async def test():
+    return "hello test!!"
