@@ -5,6 +5,8 @@
       <sourceFolder url="file://$MODULE_DIR$/app" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
+      <excludeFolder url="file://$MODULE_DIR$/greedot-project" />
+      <excludeFolder url="file://$MODULE_DIR$/greedot_project" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.8 (fastApiProject)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
