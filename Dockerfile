@@ -1,5 +1,5 @@
 # Ubuntu 20.04를 기반 이미지로 사용
-FROM ubuntu:20.04
+FROM python:3.10
 
 # ARG로 빌드 시점 변수 정의
 ARG AWS_RDS_ID

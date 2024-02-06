@@ -25,6 +25,9 @@ jobs:
         file: ./Dockerfile
         push: true
         tags: newnyup319/greedot-backend:latest
+        build-args: |
+          AWS_RDS_ID=${{ secrets.AWS_RDS_ID }}
+          AWS_RDS_PASSWORD=${{ secrets.AWS_RDS_PASSWORD }}
 
     - name: Deploy to EC2
       uses: appleboy/ssh-action@master
