@@ -1,6 +1,5 @@
 from pydantic.v1 import BaseSettings
 import secrets
-import os
 
 class Settings(BaseSettings):
     API_v1_STR: str = "/api/v1"
