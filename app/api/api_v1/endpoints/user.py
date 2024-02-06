@@ -150,11 +150,11 @@ async def update_user_profile(update_request: UserUpdate, current_user: Member =
 #     return {"access_token": new_access_token, "token_type": "bearer"}
 
 
-@router.post('/user/logout')
-async def logout_user(db: AsyncSession = Depends(get_db), current_user: Member = Depends(get_current_user)):
-    # 필요한 경우 로그아웃 처리 로직 구현
-    # 예: 리프레시 토큰 무효화
-    return {"message": "Successfully logged out"}
+# @router.post('/user/logout')
+# async def logout_user(db: AsyncSession = Depends(get_db), current_user: Member = Depends(get_current_user)):
+#     # 필요한 경우 로그아웃 처리 로직 구현
+#     # 예: 리프레시 토큰 무효화
+#     return {"message": "Successfully logged out"}
 
 
 
