@@ -23,6 +23,18 @@ class GradeEnum(PyEnum):
 
 @unique
 class LogTypeEnum(PyEnum):
-    SENDTALK = "SENDTALK"
-    RECEIVEDTALK = "RECEIVEDTALK"
-    CLICKED = "CLICKED"
+    GREE_TALK = "GREE_TALK"
+    USER_TALK = "USER_TALK"
+
+
+@unique
+class FileTypeEnum(PyEnum):
+    YAML = "YAML"
+    GIF = 'GIF'
+    IMG = 'IMG'
+
+
+@unique
+class EmotionTypeEnum(PyEnum):
+    HAPPY = "HAPPY"
+    UNHAPPY = "UNHAPPY"
