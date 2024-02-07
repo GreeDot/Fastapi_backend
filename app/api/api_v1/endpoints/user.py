@@ -1,33 +1,26 @@
 import jwt
+from fastapi.security import OAuth2PasswordRequestForm
 from jose.exceptions import JWTError
 from fastapi import APIRouter, HTTPException, Depends, status
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi.security import OAuth2PasswordRequestForm
-<<<<<<< HEAD
-from datetime import datetime
-from datetime import timedelta
 from sqlalchemy.future import select
-=======
 from datetime import datetime, timedelta
->>>>>>> b7393b44231549624aaec2d8a5ee9b6301507e60
 from typing import List, Optional
 from starlette.responses import JSONResponse
+
+from schemas.user import User, UserUpdate
 from services.user_service import create_user, user_exists
 from core.config import settings
 from models.models import Member, RoleEnum, StatusEnum, GradeEnum
-from core.security import authenticate_user, get_current_user, hash_password, verify_password, create_access_token, oauth2_scheme, Token
+from core.security import authenticate_user, hash_password, verify_password, create_access_token, oauth2_scheme, Token
 from database import get_db
 from pydantic import BaseModel
 from crud.crud_user import get_users as crud_get_users, \
     update_user as crud_update_user, \
     delete_user as crud_delete_user, \
     get_user as crud_get_user
-from schemas.user import RegisterRequest, User, UserUpdate
 
 router = APIRouter()
-
-<<<<<<< HEAD
 
 # Pydantic 모델 정의
 class RegisterRequest(BaseModel):
@@ -76,13 +69,10 @@ async def get_current_user(db: AsyncSession = Depends(get_db), token: str = Depe
 
 
 # 회원가입 엔드포인트
-=======
->>>>>>> b7393b44231549624aaec2d8a5ee9b6301507e60
 @router.post('/register')
 async def register_member(request: RegisterRequest, db: AsyncSession = Depends(get_db)):
     if await user_exists(request.username, db):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="이미 존재하는 사용자입니다.")
-<<<<<<< HEAD
     hashed_pwd = hash_password(request.password)
     new_member = Member(
         username=request.username,
@@ -96,9 +86,7 @@ async def register_member(request: RegisterRequest, db: AsyncSession = Depends(g
     db.add(new_member)
     await db.commit()
     await db.refresh(new_member)
-=======
     new_member = await create_user(request, db)
->>>>>>> b7393b44231549624aaec2d8a5ee9b6301507e60
     return {"message": "회원가입이 성공적으로 완료되었습니다.", "user_id": new_member.id}
 
 
@@ -113,11 +101,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         )
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-<<<<<<< HEAD
-        data={"sub": user.username, "role": user.role},  # 사용자 역할 정보 추가
-=======
         data={"sub": user.username, "role": user.role},
->>>>>>> b7393b44231549624aaec2d8a5ee9b6301507e60
         expires_delta=access_token_expires
     )
     return access_token

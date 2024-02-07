@@ -5,11 +5,7 @@ from models.enums import RoleEnum, StatusEnum, GradeEnum
 
 
 # 사용자 생성 스키마
-<<<<<<< HEAD
 class UserCreate(BaseModel):
-=======
-class RegisterRequest(BaseModel):
->>>>>>> b7393b44231549624aaec2d8a5ee9b6301507e60
     username: str
     nickname: str
     password: str
