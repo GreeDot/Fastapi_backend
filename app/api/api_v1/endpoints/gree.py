@@ -1,8 +1,8 @@
 from fastapi import Depends, HTTPException, status, APIRouter, File, UploadFile
 from sqlalchemy.orm import Session
-from app.api.api_v1.endpoints.user import get_current_user
-from app.database import get_db
-from app.models.models import Gree, Member
+from api.api_v1.endpoints.user import get_current_user
+from database import get_db
+from models.models import Gree, Member
 from services.upload_service import upload_file_to_azure
 
 router = APIRouter()
