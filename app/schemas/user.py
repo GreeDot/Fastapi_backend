@@ -4,8 +4,8 @@ from typing import Optional
 from models.enums import RoleEnum, StatusEnum, GradeEnum
 
 # 사용자 생성 스키마
-class UserCreate(BaseModel):
-    email: str
+class RegisterRequest(BaseModel):
+    username: str
     nickname: str
     password: str
 
@@ -18,7 +18,7 @@ class UserUpdate(BaseModel):
 #사용자 조회 스키마
 class User(BaseModel):
     id: int
-    email: str
+    username: str
     nickname: str
     role: RoleEnum
     status: StatusEnum

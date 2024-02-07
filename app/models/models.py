@@ -7,7 +7,7 @@ class Member(Base):
     __tablename__ = 'member'
 
     id = Column('member_id', Integer, primary_key=True, autoincrement=True)
-    email = Column(String(255), nullable=False)
+    username = Column(String(255), nullable=False)
     nickname = Column(String(255), nullable=False)
     password = Column(String(255), nullable=False)
     role = Column(Enum(RoleEnum), nullable=False)
@@ -24,7 +24,7 @@ class Gree(Base):
     id = Column('gree_id', Integer, primary_key=True, autoincrement=True)
     member_id = Column(Integer, ForeignKey('member.member_id'), nullable=False)
     gree_name = Column(String(255), nullable=False)
-    root_path = Column(String(255), nullable=False)
+    raw_img = Column(String(255), nullable=False)
     prompt_character = Column(String(255))  # 대체될 수 있습니다
     prompt_age = Column(Integer)
     prompt_mbti = Column(String(255))  # 대체될 수 있습니다
