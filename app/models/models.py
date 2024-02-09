@@ -30,7 +30,7 @@ class Gree(Base):
     raw_img = Column(String(255), nullable=False)
     prompt_character = Column(String(255))
     prompt_age = Column(Integer)
-    prompt_mbti = Column(String(255))  # 대체될 수 있습니다
+    prompt_mbti = Column(String(255))
     status = Column(Enum(StatusEnum))
     isFavorite = Column(Boolean, default=False)
     register_at = Column(DateTime, nullable=False, default=datetime.now())
