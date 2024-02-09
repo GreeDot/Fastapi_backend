@@ -6,6 +6,7 @@ from api.api_v1.endpoints.user import get_current_user
 from schemas.gree import GreeUpdate, Gree
 from services.upload_service import upload_file_to_azure
 from models.models import Member
+from models.models import Gree as SQLAlchemyGree
 from core.security import oauth2_scheme
 from database import get_db
 from pydantic import BaseModel
@@ -24,7 +25,7 @@ async def upload_raw_img(
     file_url = await upload_file_to_azure(file)
     member_id = current_user.id
 
-    gree_data = Gree(
+    gree_data = SQLAlchemyGree(
         raw_img=file_url,
         member_id=member_id,
         isFavorite=False,
