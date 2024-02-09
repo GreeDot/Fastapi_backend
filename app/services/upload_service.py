@@ -4,10 +4,14 @@ from azure.storage.blob import BlobServiceClient, BlobClient, ContentSettings
 from fastapi import UploadFile
 import shutil
 import uuid
-container_name = "greefile"
-connection_string = 'DefaultEndpointsProtocol=https;AccountName=greedotstorage;AccountKey=r9om6lWG14yZe22rFoQqRyIpG5HCyntaj6vdZrWQptDcSCWao4zRPNT9TnzRRR2Q/qX49TU+BXYD+ASt/CxuUA==;EndpointSuffix=core.windows.net'
+
+
 
 async def upload_file_to_azure(file: UploadFile) -> str:
+    container_name = "greefile"
+    AZURE_ACCOUNT_KEY = os.getenv("AZURE_ACCOUNT_KEY")
+    connection_string = f'DefaultEndpointsProtocol=https;AccountName=greedotstorage;AccountKey={AZURE_ACCOUNT_KEY};EndpointSuffix=core.windows.net'
+
     temp_dir = "temp"
     if not os.path.exists(temp_dir):
         os.makedirs(temp_dir)  # temp 폴더가 없으면 생성

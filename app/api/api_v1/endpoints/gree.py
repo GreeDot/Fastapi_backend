@@ -1,8 +1,8 @@
 from fastapi import Depends, HTTPException, status, APIRouter, File, UploadFile
 from sqlalchemy.orm import Session
-from app.api.api_v1.endpoints.user import get_current_user
-from app.database import get_db
-from app.models.models import Gree, Member
+from api.api_v1.endpoints.user import get_current_user
+from database import get_db
+from models.models import Gree, Member
 from services.upload_service import upload_file_to_azure
 
 router = APIRouter()
@@ -10,22 +10,22 @@ router = APIRouter()
 @router.post('/upload-raw-img')
 async def upload_raw_img(
     file: UploadFile = File(...),
-    current_user: Member = Depends(get_current_user),  # Member 객체를 직접 받음
+    current_user: Member = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     file_url = await upload_file_to_azure(file)
+    member_id = current_user.id
 
-    # member_id를 Member 객체의 id로부터 직접 얻음
-    member_id = current_user.id  # current_user 객체에서 id 속성을 사용
-
-    # Gree 객체 생성 및 데이터베이스에 저장
     gree_data = Gree(
         raw_img=file_url,
-        member_id=member_id,  # 여기서는 변환할 필요 없이 사용
+        member_id=member_id,
         isFavorite=False,
         status="active"
     )
     db.add(gree_data)
-    await db.commit()
+    db.flush()  # 비동기 ORM을 사용하는 경우, 해당 메소드의 비동기 버전을 사용해야 할 수 있음
+    await db.commit()  # 커밋하여 트랜잭션을 완료
 
-    return {"file_url": file_url, "message": "File uploaded successfully."}
+    # 이 시점에서 gree_data 객체는 데이터베이스에 의해 자동으로 생성된 ID를 가짐
+    return {"file_url": file_url, "gree_id": gree_data.id, "message": "File uploaded successfully."}
+

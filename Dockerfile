@@ -10,7 +10,7 @@ RUN apt-get install -y python3 python3-pip
 RUN pip3 install --upgrade pip
 
 # 작업 디렉토리 설정
-WORKDIR /app
+WORKDIR /workdir
 
 # 현재 디렉토리의 requirements.txt와 main.py를 /app으로 복사
 COPY . . 
