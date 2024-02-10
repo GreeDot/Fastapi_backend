@@ -2,6 +2,7 @@ from typing import List
 
 from fastapi import Depends, HTTPException, status, APIRouter, File, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from api.api_v1.endpoints.user import get_current_user
 from schemas.gree import GreeUpdate, Gree
 from services.upload_service import upload_file_to_azure
@@ -28,7 +29,7 @@ async def upload_raw_img(
         raw_img=file_url,
         member_id=member_id,
         isFavorite=False,
-        status= "ACTIVATE"
+        status= "activate"
     )
     db.add(gree_data)
     db.flush()  # 비동기 ORM을 사용하는 경우, 해당 메소드의 비동기 버전을 사용해야 할 수 있음
