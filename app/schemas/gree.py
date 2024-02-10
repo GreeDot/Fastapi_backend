@@ -13,7 +13,6 @@ class GreeUpdate(BaseModel):
 
 
 class Gree(BaseModel):
-    id: int
     member_id: int
     gree_name: Optional[str] = Field(default=None)
     raw_img: str
@@ -22,7 +21,6 @@ class Gree(BaseModel):
     prompt_mbti: Optional[str] = None
     status: StatusEnum
     isFavorite: bool
-    register_at: datetime
 
     class Config:
         orm_mode = True
