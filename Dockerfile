@@ -5,7 +5,7 @@ FROM python:3.10
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Python 설치 및 pip 업그레이드
-RUN apt-get update
+RUN apt-get update && apt-get install -y libgl1-mesa-glx
 RUN apt-get install -y python3 python3-pip
 RUN pip3 install --upgrade pip
 
