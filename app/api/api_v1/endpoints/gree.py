@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from api.api_v1.endpoints.user import get_current_user
 from models.enums import FileTypeEnum
 from schemas.gree import GreeUpdate, Gree
-from segmentation import segmentImage
+from app.segmentation import segmentImage
 from services.upload_service import upload_file_to_azure, upload_greefile_to_azure
 from models.models import Member, GreeFile
 from models.models import Gree as SQLAlchemyGree
