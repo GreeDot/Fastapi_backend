@@ -20,6 +20,7 @@ h11==0.14.0
 httptools==0.6.1
 idna==3.6
 isodate==0.6.1
+opencv-python==4.9.0.80
 pyasn1==0.5.1
 pycparser==2.21
 pydantic==2.5.3
