@@ -1,8 +1,8 @@
-"""Add user table
+"""detact update table
 
-Revision ID: 0cbd52c5700a
-Revises: 4a2658631209
-Create Date: 2024-02-13 10:56:25.743934
+Revision ID: 882213916e5f
+Revises: 1647dc2570fe
+Create Date: 2024-02-13 17:16:48.553800
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '0cbd52c5700a'
-down_revision: Union[str, None] = '4a2658631209'
+revision: str = '882213916e5f'
+down_revision: Union[str, None] = '1647dc2570fe'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -53,7 +53,7 @@ def upgrade() -> None:
     sa.Column('emotion_type', sa.Enum('GREE_TALK', 'USER_TALK', name='logtypeenum'), nullable=False),
     sa.Column('talk', sa.String(length=255), nullable=True),
     sa.Column('register_at', sa.DateTime(), nullable=False),
-    sa.Column('test', sa.String(length=255), nullable=True),
+    sa.Column('emotion_report_detect_test', sa.String(length=255), nullable=True),
     sa.ForeignKeyConstraint(['gree_id'], ['gree.gree_id'], ),
     sa.PrimaryKeyConstraint('emotion_report_id')
     )
