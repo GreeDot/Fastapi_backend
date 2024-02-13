@@ -1,18 +1,18 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from core.security import hash_password
-from models import models
-from schemas.user import UserUpdate
+from app.core.security import hash_password
+from app.models.models import Member
+from app.schemas.user import UserUpdate
 
 
 async def get_user(db: AsyncSession, user_id: int):
-    result = await db.execute(select(models.Member).filter(models.Member.id == user_id))
+    result = await db.execute(select(Member).filter(Member.id == user_id))
     return result.scalars().first()
 
 
 async def get_users(db: AsyncSession, skip: int = 0, limit: int = 100):
-    result = await db.execute(select(models.Member).offset(skip).limit(limit))
+    result = await db.execute(select(Member).offset(skip).limit(limit))
     return result.scalars().all()
 
 

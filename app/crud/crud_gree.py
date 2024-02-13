@@ -2,8 +2,8 @@ from typing import List
 
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from models import Gree as GreeModel
-from schemas.gree import GreeUpdate, Gree
+from app.models.models import Gree as GreeModel
+from app.schemas.gree import GreeUpdate, Gree
 
 async def crud_update_gree(db: AsyncSession, gree_id: int, gree_update: GreeUpdate) -> GreeModel:
     async with db as session:

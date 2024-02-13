@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional
-from models.enums import RoleEnum, StatusEnum, GradeEnum
+from app.models.enums import RoleEnum, StatusEnum, GradeEnum
 
 
 # 사용자 생성 스키마
@@ -29,5 +29,5 @@ class User(BaseModel):
     register_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         use_enum_values = True

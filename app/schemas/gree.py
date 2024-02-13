@@ -1,7 +1,8 @@
 from pydantic import BaseModel, Field
 from typing import Optional
-from models.enums import StatusEnum
 from datetime import datetime
+from app.models.enums import StatusEnum
+
 
 class GreeUpdate(BaseModel):
     gree_name: Optional[str] = None
@@ -23,4 +24,4 @@ class Gree(BaseModel):
     isFavorite: bool
 
     class Config:
-        orm_mode = True
+        from_attributes = True

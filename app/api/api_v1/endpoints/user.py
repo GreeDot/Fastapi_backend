@@ -8,14 +8,14 @@ from datetime import datetime, timedelta
 from typing import List, Optional
 from starlette.responses import JSONResponse
 
-from schemas.user import User, UserUpdate
-from services.user_service import create_user, user_exists
-from core.config import settings
-from models.models import Member, RoleEnum, StatusEnum, GradeEnum
-from core.security import authenticate_user, hash_password, verify_password, create_access_token, oauth2_scheme, Token
-from database import get_db
+from app.schemas.user import User, UserUpdate
+from app.services.user_service import create_user, user_exists
+from app.core.config import settings
+from app.models.models import Member, RoleEnum, StatusEnum, GradeEnum
+from app.core.security import authenticate_user, hash_password, verify_password, create_access_token, oauth2_scheme, Token
+from app.database import get_db
 from pydantic import BaseModel
-from crud.crud_user import get_users as crud_get_users, \
+from app.crud.crud_user import get_users as crud_get_users, \
     update_user as crud_update_user, \
     delete_user as crud_delete_user, \
     get_user as crud_get_user
@@ -71,21 +71,6 @@ async def get_current_user(db: AsyncSession = Depends(get_db), token: str = Depe
 # 회원가입 엔드포인트
 @router.post('/register')
 async def register_member(request: RegisterRequest, db: AsyncSession = Depends(get_db)):
-    if await user_exists(request.username, db):
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="이미 존재하는 사용자입니다.")
-    hashed_pwd = hash_password(request.password)
-    new_member = Member(
-        username=request.username,
-        nickname=request.nickname,
-        password=hashed_pwd,
-        role=RoleEnum.MEMBER,
-        status=StatusEnum.ACTIVATE,
-        grade=GradeEnum.FREE,
-        register_at=datetime.now()
-    )
-    db.add(new_member)
-    await db.commit()
-    await db.refresh(new_member)
     new_member = await create_user(request, db)
     return {"message": "회원가입이 성공적으로 완료되었습니다.", "user_id": new_member.id}
 
