@@ -1,7 +1,8 @@
+# app/models/models.py
 from sqlalchemy import Column, Integer, String, DateTime, Enum, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
-from .enums import RoleEnum, StatusEnum, GradeEnum, LogTypeEnum, FileTypeEnum
-from .base import Base
+from app.models.enums import RoleEnum, StatusEnum, GradeEnum, LogTypeEnum, FileTypeEnum
+from app.models.base import Base
 from datetime import datetime
 
 
@@ -17,7 +18,6 @@ class Member(Base):
     grade = Column(Enum(GradeEnum), nullable=False)
     refresh_token = Column(String(255))
     register_at = Column(DateTime, nullable=False, default=datetime.now())
-
     gree = relationship("Gree", back_populates="member")
 
 

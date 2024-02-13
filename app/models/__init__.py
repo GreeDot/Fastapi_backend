@@ -1,7 +1,8 @@
 from sqlalchemy import create_engine
-from .base import Base
-from .models import Member, Gree, Log, GreeFile, EmotionReport
-from core.config import DATABASE_URI
+
+# main.py를 기준으로 하는게 아닌, 프로젝트 루트 경로를 베이스로 한다.
+from app.models.base import Base
+from app.core.config import DATABASE_URI
 
 
 def init_db():

@@ -2,9 +2,9 @@
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from core.config import settings
-from core.security import Token, authenticate_user, create_access_token, hash_password
-from models.models import Member, RoleEnum, StatusEnum, GradeEnum
+from app.core.config import settings
+from app.core.security import Token, authenticate_user, create_access_token, hash_password
+from app.models.models import Member, RoleEnum, StatusEnum, GradeEnum
 from datetime import datetime, timedelta
 
 

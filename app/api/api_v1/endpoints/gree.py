@@ -4,21 +4,25 @@ from typing import List
 from fastapi import Depends, HTTPException, status, APIRouter, File, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.api_v1.endpoints.user import get_current_user
-from models.enums import FileTypeEnum 
-from schemas.gree import GreeUpdate, Gree
-from segmentation import segmentImage
-from services.upload_service import upload_file_to_azure, upload_greefile_to_azure
-from models.models import Member, GreeFile
-from models.models import Gree as SQLAlchemyGree
-from database import get_db
+
 from pydantic import BaseModel
-from crud.crud_gree import crud_get_grees, crud_update_gree, crud_get_gree_by_id, crud_update_gree_status
-from crud.crud_user import get_user as crud_get_user
+
 import requests
 import aiohttp
 import aiofiles
 import uuid
+
+from app.services.upload_service import upload_file_to_azure, upload_greefile_to_azure
+from app.api.api_v1.endpoints.user import get_current_user
+from app.models.enums import FileTypeEnum 
+from app.schemas.gree import GreeUpdate, Gree
+from app.segmentation import segmentImage
+from app.models.models import Member, GreeFile
+from app.models.models import Gree as SQLAlchemyGree
+from app.crud.crud_gree import crud_get_grees, crud_update_gree, crud_get_gree_by_id, crud_update_gree_status
+from app.crud.crud_user import get_user as crud_get_user
+from app.database import get_db
+
 router = APIRouter()
 
 @router.post('/upload-raw-img')
