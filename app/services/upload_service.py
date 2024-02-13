@@ -1,32 +1,40 @@
+import cv2
+import numpy as np
 import os
-
-from azure.storage.blob import BlobServiceClient, BlobClient, ContentSettings
-from fastapi import UploadFile
 import shutil
 import uuid
-
-
+from azure.storage.blob import BlobServiceClient, ContentSettings
+from fastapi import UploadFile
+from io import BytesIO
 
 async def upload_file_to_azure(file: UploadFile) -> str:
     container_name = "greefile"
     AZURE_ACCOUNT_KEY = os.getenv("AZURE_ACCOUNT_KEY")
     connection_string = f'DefaultEndpointsProtocol=https;AccountName=greedotstorage;AccountKey={AZURE_ACCOUNT_KEY};EndpointSuffix=core.windows.net'
 
-    temp_dir = "temp"
-    if not os.path.exists(temp_dir):
-        os.makedirs(temp_dir)  # temp 폴더가 없으면 생성
-    temp_file_path = f"{temp_dir}/{uuid.uuid4()}.png"
+    # 파일 내용을 메모리에 읽기
+    contents = await file.read()
+    nparr = np.frombuffer(contents, np.uint8)
+    image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
-    with open(temp_file_path, 'wb') as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    # 리사이즈할 새로운 너비, 비율에 따라 높이 계산
+    new_width = 400
+    original_height, original_width = image.shape[:2]
+    new_height = int((new_width / original_width) * original_height)
 
+    # 이미지 리사이즈
+    resized_image = cv2.resize(image, (new_width, new_height))
+
+    # 리사이즈된 이미지를 메모리에 인코딩
+    _, buffer = cv2.imencode('.png', resized_image)
+
+    # Blob Service 클라이언트 생성 및 Blob 업로드
     blob_service_client = BlobServiceClient.from_connection_string(connection_string)
     blob_client = blob_service_client.get_blob_client(container=container_name, blob=f"upload/{uuid.uuid4()}.png")
 
-    with open(temp_file_path, "rb") as data:
-        blob_client.upload_blob(data, overwrite=True, content_settings=ContentSettings(content_type='image/png'))
+    # 인코딩된 이미지 데이터로부터 Blob에 업로드
+    blob_client.upload_blob(BytesIO(buffer), overwrite=True, content_settings=ContentSettings(content_type='image/png'))
 
-    os.remove(temp_file_path)
     return blob_client.url
 
 

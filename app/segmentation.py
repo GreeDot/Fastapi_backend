@@ -80,7 +80,7 @@ def segmentImage(image, output_path = "./"):
 
     # Save the 'Largest Contour Mask' and 'Resized Image' to the specified output path
     for name, img in imageList:
-        if name in ('Largest Contour Mask', 'Resized Image'):
+        if name in ('Largest Contour Mask'):
             file_path = os.path.join(output_path, f"{name.replace(' ', '_')}.png")
             cv2.imwrite(file_path, img)
             saved_paths.append(file_path)  # 저장된 각 파일의 경로를 리스트에 추가
