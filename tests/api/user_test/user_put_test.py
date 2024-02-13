@@ -34,38 +34,43 @@ async def async_client():
 @pytest.mark.asyncio
 async def test_login_member_success_async(async_client):
     # 목업 데이터 준비
+    print('=====목업 데이터 준비=====')
+    MODIFIED_PASSWORD = "modified_password"
+    MODIFIED_NICKNAME = "modified_nickname"
+    TESTUSER = "testuser"
+
     register_data = {
-        "username": "testuser",
+        "username": TESTUSER,
         "nickname": "testnickname",
         "password": "testpassword"
     }
     
-    print('=====목업 데이터 준비=====')
     response = await async_client.post("/api/v1/user/register", json=register_data)
     assert response.status_code == 200
-    data = response.json()
-    print(f'data = {data}')
 
-    # 로그인 정상작동 확인
-    login_data = {
-        "username": "testuser",
-        "password": "testpassword"
+    
+    print('=====user_put 정상작동 확인(회원 정보 수정 후 로그인 시도)=====')
+    put_data = {
+        "nickname": MODIFIED_NICKNAME,
+        "password": MODIFIED_PASSWORD
     }
-
-    print('=====로그인 정상작동 확인=====')
-    response = await async_client.post("/api/v1/user/login", data=login_data)
+    response = await async_client.put("/api/v1/user/1", json=put_data)
     assert response.status_code == 200, f"Expected status code 200, got {response.status_code}"
     data = response.json()
     print(f'data = {data}')
+    assert data["nickname"] == MODIFIED_NICKNAME
 
-    # 로그인 정상작동 확인
+    # 변경된 비밀번호로 로그인 시도
     login_data = {
-        "username": "testuser",
-        "password": "invalid_passowrd"
+        "username": TESTUSER,
+        "password": MODIFIED_PASSWORD
     }
+    try:
+        response = await async_client.post("/api/v1/user/login", data=login_data)
+    except:
+        print(Exception)
 
-    print('=====잘못된 비밀번호 실패 확인=====')
-    response = await async_client.post("/api/v1/user/login", data=login_data)
-    assert response.status_code != 200
+    # 로그인 성공 확인
+    assert response.status_code == 200, f"Expected status code 200, got {response.status_code}"
     data = response.json()
-    print(f'data = {data}')
+    assert data['access_token'] is not None, "Access token should not be None for successful login"
