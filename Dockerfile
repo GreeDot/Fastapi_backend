@@ -19,4 +19,4 @@ COPY . .
 RUN pip3 install -r requirements.txt
 
 # 컨테이너가 시작될 때 main.py 실행
-CMD ["python3", "app/main.py"]
+CMD ["python3", "main.py"]
