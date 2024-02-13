@@ -10,9 +10,9 @@ from pydantic import BaseModel
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database import AsyncSessionLocal, get_db
-from models.models import Member
-from .config import settings
+from app.database import AsyncSessionLocal, get_db
+from app.models.models import Member
+from app.core.config import settings
 
 class Token(BaseModel):
     access_token: str
