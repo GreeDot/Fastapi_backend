@@ -112,7 +112,7 @@ async def download_image_async(image_url: str, local_file_path: str):
                 raise Exception(f"Failed to download image. Status code: {response.status}")
 
 
-@router.post("/greefile/upload")
+@router.post("/greefile/upload/{gree_id}")
 async def upload_gree_file(
         gree_id: int,
         current_user: Member = Depends(get_current_user),
