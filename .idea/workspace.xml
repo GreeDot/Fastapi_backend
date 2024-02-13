@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b46cffd0-046b-4a51-ad6f-82b087c02435" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/docker-build-and-push.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/docker-build-and-push.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/api/api_v1/endpoints/gree.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/api_v1/endpoints/gree.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/segmentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/segmentation.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +62,7 @@
     "Python.views.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Merging main",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "C:/src/anaconda3/condabin/conda.bat",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -248,7 +244,7 @@
       <workItem from="1707490099871" duration="741000" />
       <workItem from="1707547793951" duration="160000" />
       <workItem from="1707547962784" duration="14026000" />
-      <workItem from="1707783642468" duration="2188000" />
+      <workItem from="1707783642468" duration="6145000" />
     </task>
     <servers />
   </component>
