@@ -1,10 +1,11 @@
 # app/models/models.py
 from sqlalchemy import Column, Integer, String, DateTime, Enum, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
 from app.models.enums import RoleEnum, StatusEnum, GradeEnum, LogTypeEnum, FileTypeEnum
-from app.models.base import Base
 from datetime import datetime
 
+Base = declarative_base()
 
 class Member(Base):
     __tablename__ = 'member'

@@ -1,3 +1,4 @@
+# app/api/api_v1/endpoints/user.py
 import jwt
 from fastapi.security import OAuth2PasswordRequestForm
 from jose.exceptions import JWTError
@@ -8,7 +9,7 @@ from datetime import datetime, timedelta
 from typing import List, Optional
 from starlette.responses import JSONResponse
 
-from app.schemas.user import User, UserUpdate
+from app.schemas.user import User, UserCreate, UserUpdate
 from app.services.user_service import create_user, user_exists
 from app.core.config import settings
 from app.models.models import Member, RoleEnum, StatusEnum, GradeEnum
@@ -22,19 +23,6 @@ from app.crud.crud_user import get_users as crud_get_users, \
 
 router = APIRouter()
 
-# Pydantic 모델 정의
-class RegisterRequest(BaseModel):
-    username: str
-    nickname: str
-    password: str
-
-
-# 이메일 중복 확인
-async def user_exists(username: str, db_session: AsyncSession) -> bool:
-    async with db_session as session:
-        result = await session.execute(select(Member).where(Member.username == username))
-        member = result.scalars().first()
-        return member is not None
 
 ## 이메일이 일치한지 확인
 async def authenticate_user(username: str, password: str, db: AsyncSession) -> Optional[Member]:
@@ -44,7 +32,6 @@ async def authenticate_user(username: str, password: str, db: AsyncSession) -> O
         if user and verify_password(password, user.password):
             return user
     return None
-
 
 async def get_current_user(db: AsyncSession = Depends(get_db), token: str = Depends(oauth2_scheme)) -> Member:
     credentials_exception = HTTPException(
@@ -68,9 +55,10 @@ async def get_current_user(db: AsyncSession = Depends(get_db), token: str = Depe
         return user
 
 
+
 # 회원가입 엔드포인트
 @router.post('/register')
-async def register_member(request: RegisterRequest, db: AsyncSession = Depends(get_db)):
+async def register_member(request: UserCreate, db: AsyncSession = Depends(get_db)):
     new_member = await create_user(request, db)
     return {"message": "회원가입이 성공적으로 완료되었습니다.", "user_id": new_member.id}
 
@@ -148,3 +136,9 @@ async def update_user_profile(update_request: UserUpdate, current_user: Member =
 @router.get('/test')
 async def test():
     return "hello test!!!! 4트"
+
+
+
+
+
+
