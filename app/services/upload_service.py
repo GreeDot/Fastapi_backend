@@ -38,7 +38,7 @@ async def upload_greefile_to_azure(local_file_path: str) -> str:
     blob_service_client = BlobServiceClient.from_connection_string(connection_string)
     # 파일 이름은 로컬 파일 경로에서 추출
     file_name = os.path.basename(local_file_path)
-    blob_client = blob_service_client.get_blob_client(container=container_name, blob=f"upload/{file_name}")
+    blob_client = blob_service_client.get_blob_client(container=container_name, blob=f"upload/{uuid.uuid4()}")
 
     # 로컬 파일을 읽어서 Azure에 업로드
     with open(local_file_path, "rb") as data:
