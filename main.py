@@ -25,11 +25,9 @@ app.add_middleware(
 app.include_router(api_router, prefix=settings.API_v1_STR)
 
 def run_alembic_upgrade():
-    """Alembic을 사용하여 자동으로 리비전을 생성하고 
-    데이터베이스를 최신 상태로 마이그레이션합니다."""
+    """Alembic을 사용하여 자동으로 리비전을 생성하고 데이터베이스를 최신 상태로 마이그레이션합니다."""
     alembic_cfg = Config("alembic.ini")
     command.revision(alembic_cfg, message="Add table", autogenerate=True)
-    command.stamp(alembic_cfg, "head")
     command.upgrade(alembic_cfg, "head")
 
 if __name__ == "__main__":
