@@ -1,11 +1,17 @@
 import cv2
 import numpy as np
-import os
-import shutil
 import uuid
 from azure.storage.blob import BlobServiceClient, ContentSettings
-from fastapi import UploadFile
+from fastapi import UploadFile, HTTPException
 from io import BytesIO
+import yaml
+import os
+from uuid import uuid4
+
+from select import select
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.models.models import Gree, GreeFile
+
 
 async def upload_file_to_azure(file: UploadFile) -> str:
     container_name = "greefile"
@@ -74,3 +80,36 @@ async def upload_yaml_to_azure_blob(local_file_path: str) -> str:
     # 업로드된 파일의 URL 반환
     blob_url = blob_client.url
     return blob_url
+
+
+
+async def create_and_save_new_yaml(gree_id: int, db: AsyncSession) -> str:
+    # gree 객체 조회
+    gree = await db.get(Gree, gree_id)
+    if not gree:
+        raise HTTPException(status_code=404, detail="Gree not found")
+
+    # gree_file 객체에서 img와 yaml 타입의 파일 조회
+    gree_files = await db.execute(
+        select(GreeFile).filter_by(gree_id=gree_id, file_type='yaml')
+    )
+    gree_files = gree_files.scalars().all()
+
+    yaml_content = {
+        'scene': {
+            'ANIMATED_CHARACTERS': [
+                {
+                    'character_cfg': '<URL to the character_cfg.yaml>',  # 이 부분은 수정이 필요할 수 있습니다.
+                    'motion_cfg': '<URL to the motion_cfg.yaml>',  # 이 부분은 수정이 필요할 수 있습니다.
+                    'retarget_cfg': '<URL to the retarget_cfg.yaml>'  # 이 부분은 수정이 필요할 수 있습니다.
+                }
+            ]
+        }
+    }
+
+    # YAML 파일 생성 및 저장
+    local_file_path = f"temp/{gree_id}.yaml"
+    with open(local_file_path, 'w') as yaml_file:
+        yaml.dump(yaml_content, yaml_file, default_flow_style=False)
+
+    return local_file_path
