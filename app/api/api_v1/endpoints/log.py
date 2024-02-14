@@ -23,3 +23,7 @@ async def read_logs(skip: int = 0, limit: int = 100, db: AsyncSession = Depends(
 @router.delete("/{log_id}", response_model=LogResponseDto)
 async def delete_log(log_id: int, db: AsyncSession = Depends(get_db)):
     return await delete_log_service(db, log_id)
+
+@router.get("/gree/{gree_id}", response_model=List[LogResponseDto])
+async def read_logs_by_gree(gree_id: int, db: AsyncSession = Depends(get_db)):
+    return await get_logs_by_gree_service(db, gree_id)
