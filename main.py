@@ -31,5 +31,5 @@ def run_alembic_upgrade():
     command.upgrade(alembic_cfg, "head")
 
 if __name__ == "__main__":
-    # run_alembic_upgrade()
+    run_alembic_upgrade()
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True, log_level="debug")

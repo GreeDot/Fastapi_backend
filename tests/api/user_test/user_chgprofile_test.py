@@ -57,7 +57,7 @@ async def test_update_user_profile_success(async_client):
         "nickname": "updated_nickname",
         "password": "updated_password"
     }
-    response = await async_client.put("/api/v1/user/change-profile", json=update_data, headers=headers)
+    response = await async_client.post("/api/v1/user/change-profile", json=update_data, headers=headers)
     assert response.status_code == 200
     updated_profile = response.json()
     assert updated_profile['nickname'] == "updated_nickname"
@@ -67,7 +67,7 @@ async def test_update_user_profile_success(async_client):
         "username": "update_profile_user",
         "password": "updated_password"
     }
-    response = await async_client.put("/api/v1/user/login", data=changed_login_data)
+    response = await async_client.post("/api/v1/user/login", data=changed_login_data)
     assert response.status_code == 200
     updated_profile = response.json()
     
