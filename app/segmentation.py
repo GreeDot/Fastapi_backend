@@ -6,7 +6,6 @@ import os
 def segmentImage(image_path, output_path = "./"):
     image = cv2.imread(image_path)
 
-    print(image.shape)
     imageList = []
     saved_paths = []
 
@@ -86,6 +85,3 @@ def segmentImage(image_path, output_path = "./"):
             saved_paths.append(file_path)  # 저장된 각 파일의 경로를 리스트에 추가
 
     return saved_paths
-
-segmentImage('Skt-Greedot-backend/animation/char7/texture.png')
-

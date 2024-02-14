@@ -1,2 +1,2 @@
 from animated_drawings import render
-render.start('interactive_window_example.yaml')
+render.start('./examples/config/mvc/export_gif_example.yaml')
