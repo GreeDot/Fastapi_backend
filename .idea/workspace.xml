@@ -6,10 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b46cffd0-046b-4a51-ad6f-82b087c02435" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/api_v1/endpoints/gree.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/api_v1/endpoints/gree.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/segmentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/segmentation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/make_gif.py" beforeDir="false" afterPath="$PROJECT_DIR$/make_gif.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -263,7 +260,7 @@
       <workItem from="1707793845267" duration="12770000" />
       <workItem from="1707824792958" duration="688000" />
       <workItem from="1707825500172" duration="2527000" />
-      <workItem from="1707874817897" duration="20770000" />
+      <workItem from="1707874817897" duration="21278000" />
     </task>
     <servers />
   </component>
