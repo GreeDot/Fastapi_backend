@@ -69,7 +69,7 @@ def verify_token(token: str) -> dict:
 
 
 ## 이메일이 일치한지 확인
-async def authenticate_user(username: str, password: str, db: AsyncSessionLocal) -> Optional[Member]:
+async def authenticate_user(username: str, password: str, db: AsyncSessionLocal) -> Optional[Member]: # type: ignore
     async with db as session:
         result = await session.execute(select(Member).where(Member.username == username))
         user = result.scalars().first()

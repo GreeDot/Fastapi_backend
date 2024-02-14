@@ -19,7 +19,7 @@ class Member(Base):
     grade = Column(Enum(GradeEnum), nullable=False)
     refresh_token = Column(String(255))
     register_at = Column(DateTime, nullable=False, default=datetime.now())
-    gree = relationship("Gree", back_populates="member", lazy='joined')
+    gree = relationship("Gree", back_populates="member")
 
 
 class Gree(Base):
