@@ -1,21 +1,25 @@
 import cv2
 import numpy as np
 import os
-import shutil
 import uuid
 from azure.storage.blob import BlobServiceClient, ContentSettings
 from fastapi import UploadFile
 from io import BytesIO
+from tempfile import NamedTemporaryFile
 
 async def upload_file_to_azure(file: UploadFile) -> str:
     container_name = "greefile"
     AZURE_ACCOUNT_KEY = os.getenv("AZURE_ACCOUNT_KEY")
     connection_string = f'DefaultEndpointsProtocol=https;AccountName=greedotstorage;AccountKey={AZURE_ACCOUNT_KEY};EndpointSuffix=core.windows.net'
 
-    # 파일 내용을 메모리에 읽기
-    contents = await file.read()
-    nparr = np.frombuffer(contents, np.uint8)
-    image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    # 파일 내용을 임시 파일에 저장
+    with NamedTemporaryFile(delete=False) as temp_file:
+        contents = await file.read()
+        temp_file.write(contents)
+        temp_file.seek(0)  # 파일 읽기 위치를 시작 위치로 이동
+
+        # OpenCV를 사용하여 이미지 읽기
+        image = cv2.imread(temp_file.name)
 
     # 리사이즈할 새로운 너비, 비율에 따라 높이 계산
     new_width = 400
@@ -32,7 +36,7 @@ async def upload_file_to_azure(file: UploadFile) -> str:
     blob_client = blob_service_client.get_blob_client(container=container_name, blob=f"upload/{uuid.uuid4()}.png")
 
     # 인코딩된 이미지 데이터로부터 Blob에 업로드
-    blob_client.upload_blob(BytesIO(buffer), overwrite=True, content_settings=ContentSettings(content_type='image/png'))
+    blob_client.upload_blob(BytesIO(buffer.tobytes()), overwrite=True, content_settings=ContentSettings(content_type='image/png'))
 
     return blob_client.url
 

@@ -112,7 +112,7 @@ async def read_user_profile(current_user: Member = Depends(get_current_user), db
     return user
 
 
-@router.put('/change-profile', response_model=User)
+@router.post('/change-profile', response_model=User)
 async def update_user_profile(update_request: UserUpdate, current_user: Member = Depends(get_current_user), db: AsyncSession = Depends(get_db)) -> Optional[User]:
     # 이메일은 수정되지 않도록, UserUpdate 모델에서 이메일 필드를 제외하거나 무시합니다.
     print(current_user)
