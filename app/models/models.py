@@ -61,8 +61,7 @@ class Log(Base):
     id = Column('log_id', Integer, primary_key=True, autoincrement=True)
     gree_id = Column(Integer, ForeignKey('gree.gree_id'), nullable=False)
     log_type = Column(Enum(LogTypeEnum), nullable=False)
-    talk = Column(String(255))
-    content = Column(String(255))
+    content = Column(String(1000))
     register_at = Column(DateTime, nullable=False, default=datetime.now())
 
     gree = relationship("Gree", back_populates="log")

@@ -42,7 +42,6 @@ async def upload_raw_img(
         status= "activate"
     )
     db.add(gree_data)
-    db.flush()  # 비동기 ORM을 사용하는 경우, 해당 메소드의 비동기 버전을 사용해야 할 수 있음
     await db.commit()  # 커밋하여 트랜잭션을 완료
 
     # 이 시점에서 gree_data 객체는 데이터베이스에 의해 자동으로 생성된 ID를 가짐
