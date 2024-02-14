@@ -1,20 +1,20 @@
 import os
+import shutil
 from typing import List
 
-from fastapi import Depends, HTTPException, status, APIRouter, File, UploadFile
+from fastapi import Depends, HTTPException, APIRouter, File, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
 from pydantic import BaseModel
 
-import requests
 import aiohttp
 import aiofiles
 import uuid
 
-from app.services.upload_service import upload_file_to_azure, upload_greefile_to_azure
+from app.services.upload_service import upload_file_to_azure, upload_greefile_to_azure, \
+    upload_yaml_to_azure_blob
 from app.api.api_v1.endpoints.user import get_current_user
-from app.models.enums import FileTypeEnum 
 from app.schemas.gree import GreeUpdate, Gree
 from app.segmentation import segmentImage
 from app.models.models import Member, GreeFile
@@ -154,3 +154,39 @@ async def upload_gree_file(
     os.remove(local_original_image_path)
 
     return {"message": "Files uploaded successfully", "urls": uploaded_urls}
+
+
+@router.post("/greefile/upload_yaml/{gree_id}")
+async def upload_yaml(
+        gree_id: int,
+        file: UploadFile = File(...),
+        current_user: Member = Depends(get_current_user),
+        db: AsyncSession = Depends(get_db)):
+    # Gree 객체 조회
+    gree = await crud_get_gree_by_id(db, gree_id, user_id=current_user.id)
+    if not gree:
+        raise HTTPException(status_code=404, detail="Gree not found")
+
+    # 파일을 로컬에 임시 저장
+    local_file_path = f"temp/{uuid.uuid4()}_{file.filename}"
+    with open(local_file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    # Azure Blob Storage에 업로드 및 URL 획득
+    file_url = await upload_yaml_to_azure_blob(file)  # Azure 컨테이너 이름 예시
+
+    # GreeFile 객체 생성 및 저장
+    gree_file = GreeFile(
+        gree_id=gree_id,
+        file_type='YAML',
+        file_name=file.filename,  # 원본 파일 이름
+        real_name=file_url,  # Azure에 저장된 파일의 URL
+    )
+    db.add(gree_file)
+    await db.commit()
+    await db.refresh(gree_file)
+
+    # 임시 파일 삭제
+    os.remove(local_file_path)
+
+    return {"message": "YAML file uploaded successfully", "url": file_url}
