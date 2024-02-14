@@ -10,8 +10,7 @@ def segmentImage(image, output_path = "./"):
     # 새로운 너비 설정 (400픽셀)
     new_width = 400
     # 종횡비를 유지하기 위한 새로운 높이 계산
-    original_height, original_width = image.shape[:2]
-    new_height = int((new_width / original_width) * original_height)
+    new_height = 400
 
     # 이미지 리사이즈
     resized_image = cv2.resize(image, (new_width, new_height))
