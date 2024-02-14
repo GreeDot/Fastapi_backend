@@ -5,7 +5,6 @@ from typing import List
 from fastapi import Depends, HTTPException, APIRouter, File, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
-
 from pydantic import BaseModel
 
 import aiohttp
@@ -25,6 +24,7 @@ from app.database import get_db
 
 router = APIRouter()
 
+
 @router.post('/upload-raw-img')
 async def upload_raw_img(
         file: UploadFile = File(...),
@@ -38,7 +38,7 @@ async def upload_raw_img(
         raw_img=file_url,
         member_id=member_id,
         isFavorite=False,
-        status= "activate"
+        status="activate"
     )
     db.add(gree_data)
     db.flush()  # 비동기 ORM을 사용하는 경우, 해당 메소드의 비동기 버전을 사용해야 할 수 있음
@@ -55,7 +55,6 @@ class SuccessMessage(BaseModel):
 @router.put('/update/{gree_id}', response_model=SuccessMessage)
 async def update_gree(gree_id: int, gree_update: GreeUpdate, current_user: Member = Depends(get_current_user),
                       db: AsyncSession = Depends(get_db)):
-
     user = await crud_get_user(db, current_user.id)
     if not user:
         raise HTTPException(status_code=401, detail="Invalid or expired token")
@@ -90,7 +89,6 @@ async def read_gree(gree_id: int, current_user: Member = Depends(get_current_use
 @router.put('/disable/{gree_id}', response_model=SuccessMessage)
 async def disable_gree(gree_id: int, current_user: Member = Depends(get_current_user),
                        db: AsyncSession = Depends(get_db)):
-
     user = await crud_get_user(db, current_user.id)
     if not user:
         raise HTTPException(status_code=401, detail="Invalid or expired token")
@@ -98,7 +96,6 @@ async def disable_gree(gree_id: int, current_user: Member = Depends(get_current_
     await crud_update_gree_status(db, gree_id=gree_id, user_id=user.id, new_status="DISABLED")
 
     return {"message": "Gree disabled successfully"}
-
 
 
 async def download_image_async(image_url: str, local_file_path: str):
@@ -168,25 +165,23 @@ async def upload_yaml(
         raise HTTPException(status_code=404, detail="Gree not found")
 
     # 파일을 로컬에 임시 저장
-    local_file_path = f"temp/{uuid.uuid4()}_{file.filename}"
+    local_file_path = f"temp/{uuid.uuid4()}.yaml"
     with open(local_file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    # Azure Blob Storage에 업로드 및 URL 획득
-    file_url = await upload_yaml_to_azure_blob(file)  # Azure 컨테이너 이름 예시
+    file_url = await upload_yaml_to_azure_blob(local_file_path)  # 여기를 수정함
 
     # GreeFile 객체 생성 및 저장
     gree_file = GreeFile(
         gree_id=gree_id,
         file_type='YAML',
-        file_name=file.filename,  # 원본 파일 이름
-        real_name=file_url,  # Azure에 저장된 파일의 URL
+        file_name=file.filename,
+        real_name=file_url,
     )
     db.add(gree_file)
     await db.commit()
     await db.refresh(gree_file)
 
-    # 임시 파일 삭제
     os.remove(local_file_path)
 
     return {"message": "YAML file uploaded successfully", "url": file_url}

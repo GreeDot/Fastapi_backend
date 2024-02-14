@@ -54,12 +54,11 @@ async def upload_greefile_to_azure(local_file_path: str) -> str:
     return blob_client.url
 
 
-def upload_yaml_to_azure_blob(local_file_path: str) -> str:
+async def upload_yaml_to_azure_blob(local_file_path: str) -> str:
     container_name: str = "greefile"
     AZURE_ACCOUNT_KEY = os.getenv("AZURE_ACCOUNT_KEY")
-    AZURE_ACCOUNT_NAME = os.getenv("AZURE_ACCOUNT_NAME")
 
-    connection_string = f"DefaultEndpointsProtocol=https;AccountName={AZURE_ACCOUNT_NAME};AccountKey={AZURE_ACCOUNT_KEY};EndpointSuffix=core.windows.net"
+    connection_string = f"DefaultEndpointsProtocol=https;AccountName=greedotstorage;AccountKey={AZURE_ACCOUNT_KEY};EndpointSuffix=core.windows.net"
 
     blob_service_client = BlobServiceClient.from_connection_string(connection_string)
 
@@ -70,7 +69,7 @@ def upload_yaml_to_azure_blob(local_file_path: str) -> str:
 
     with open(local_file_path, "rb") as data:
         blob_client.upload_blob(data, overwrite=True,
-                                content_settings=ContentSettings(content_type='application/octet-stream'))
+                                content_settings=ContentSettings(content_type='application/x-yaml'))
 
     # 업로드된 파일의 URL 반환
     blob_url = blob_client.url
