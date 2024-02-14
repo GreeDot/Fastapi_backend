@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b46cffd0-046b-4a51-ad6f-82b087c02435" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/api_v1/endpoints/gree.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/api_v1/endpoints/gree.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/services/upload_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/upload_service.py" afterDir="false" />
-    </list>
+    <list default="true" id="b46cffd0-046b-4a51-ad6f-82b087c02435" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -257,7 +253,7 @@
       <workItem from="1707793845267" duration="12770000" />
       <workItem from="1707824792958" duration="688000" />
       <workItem from="1707825500172" duration="2527000" />
-      <workItem from="1707874817897" duration="5514000" />
+      <workItem from="1707874817897" duration="5940000" />
     </task>
     <servers />
   </component>
