@@ -5,30 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b46cffd0-046b-4a51-ad6f-82b087c02435" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/alembic/versions/086d4fd012ba_add_table.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/alembic/versions/6bfb70ff7349_add_table.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/alembic/versions/78598fc7f6f7_add_table.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/alembic/versions/7aaf6b18ccc0_add_table.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/alembic/versions/b33b00b9f30a_add_table.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/alembic/versions/bc58e4943783_add_table.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/alembic/versions/e7ac5cb35f0d_add_table.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/api/api_v1/endpoints/log.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/crud/crud_log.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/schemas/LogDto.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/services/log_service.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/api/gree_test/__fail__gree_upload_test.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/api/gree_test/testimg/uploadtestimg.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/api/api_v1/endpoints/gree.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/api_v1/endpoints/gree.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/api_v1/endpoints/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/api_v1/endpoints/user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/router.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/router.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/core/security.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/core/security.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/services/upload_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/upload_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pytest.ini" beforeDir="false" afterPath="$PROJECT_DIR$/pytest.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp/1c6f4c73-c80e-46be-a59a-1a299c2173d7-test.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/temp/uploadtest.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/api/user_test/user_chgprofile_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/api/user_test/user_chgprofile_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/segmentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/segmentation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/make_gif.py" beforeDir="false" afterPath="$PROJECT_DIR$/make_gif.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,11 +61,12 @@
     "Python.gree.executor": "Run",
     "Python.main.executor": "Run",
     "Python.segmentation.executor": "Run",
+    "Python.test.executor": "Run",
     "Python.upload_service.executor": "Run",
     "Python.views.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Merging main",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "C:/Users/2022-PC(T)-21/Desktop/Greedot_backend/Skt-Greedot-backend/AnimatedDrawings/examples/characters/char7",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -100,11 +82,11 @@
       <recent name="C:\Users\2022-PC(T)-21\Desktop\Greedot_backend\Skt-Greedot-backend\AnimatedDrawings\examples\characters\char7" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\2022-PC(T)-21\Desktop\Greedot_backend\Skt-Greedot-backend\animation\char7" />
       <recent name="C:\Users\2022-PC(T)-21\Desktop\Greedot_backend\Skt-Greedot-backend\animation" />
+      <recent name="C:\Users\2022-PC(T)-21\Desktop\Greedot_backend\Skt-Greedot-backend\animation\char7" />
+      <recent name="C:\Users\2022-PC(T)-21\Desktop\Greedot_backend\Skt-Greedot-backend\app" />
       <recent name="C:\Users\2022-PC(T)-21\Desktop\Greedot_backend\Skt-Greedot-backend" />
       <recent name="C:\Users\2022-PC(T)-21\Desktop\fastapi\fastApiProject\app\temp" />
-      <recent name="C:\Users\2022-PC(T)-21\Desktop\fastapi\fastApiProject\app\api" />
     </key>
   </component>
   <component name="RunManager">
@@ -281,7 +263,7 @@
       <workItem from="1707793845267" duration="12770000" />
       <workItem from="1707824792958" duration="688000" />
       <workItem from="1707825500172" duration="2527000" />
-      <workItem from="1707874817897" duration="17772000" />
+      <workItem from="1707874817897" duration="20770000" />
     </task>
     <servers />
   </component>
@@ -297,6 +279,7 @@
     <SUITE FILE_PATH="coverage/fastApiProject$fastApiProject.coverage" NAME="fastApiProject Coverage Results" MODIFIED="1705486022713" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/fastApiProject$views.coverage" NAME="views Coverage Results" MODIFIED="1705485396885" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
     <SUITE FILE_PATH="coverage/fastApiProject$database.coverage" NAME="database Coverage Results" MODIFIED="1705889514200" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
-    <SUITE FILE_PATH="coverage/Skt_Greedot_backend$segmentation.coverage" NAME="segmentation Coverage Results" MODIFIED="1707898110420" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
+    <SUITE FILE_PATH="coverage/Skt_Greedot_backend$segmentation.coverage" NAME="segmentation Coverage Results" MODIFIED="1707899200431" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
+    <SUITE FILE_PATH="coverage/Skt_Greedot_backend$test.coverage" NAME="test Coverage Results" MODIFIED="1707898765094" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

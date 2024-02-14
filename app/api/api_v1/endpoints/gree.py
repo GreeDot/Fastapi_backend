@@ -217,7 +217,7 @@ async def create_and_upload_assets(
     # gree_file 객체에서 yaml 파일 조회
     gree_file_result = await db.execute(
         select(GreeFile)
-        .where(GreeFile.gree_id == gree_id, GreeFile.file_type == 'yaml')
+        .where(GreeFile.gree_id == gree_id, GreeFile.file_type == 'YAML')
     )
     gree_yaml_file = gree_file_result.scalars().first()
     if not gree_yaml_file:
@@ -226,7 +226,7 @@ async def create_and_upload_assets(
     # gree_file 객체에서 img 파일 조회
     gree_img_result = await db.execute(
         select(GreeFile)
-        .where(GreeFile.gree_id == gree_id, GreeFile.file_type == 'img')
+        .where(GreeFile.gree_id == gree_id, GreeFile.file_type == 'IMG')
     )
     gree_img_file = gree_img_result.scalars().first()
     if not gree_img_file:
