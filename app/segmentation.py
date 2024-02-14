@@ -3,13 +3,14 @@ import numpy as np
 import os
 
 #이미지랑 경로 넣으면 해당 경로에 마스크랑 리사이즈된 이미지 저장된 return값은 무시해도됨 디버그용
-def segmentImage(image, output_path = "./"):
-    image = cv2.imread(image)
+def segmentImage(image_path, output_path = "./"):
+    image = cv2.imread(image_path)
+
+    print(image.shape)
     imageList = []
     saved_paths = []
-    # 새로운 너비 설정 (400픽셀)
+
     new_width = 400
-    # 종횡비를 유지하기 위한 새로운 높이 계산
     new_height = 400
 
     # 이미지 리사이즈
@@ -85,4 +86,6 @@ def segmentImage(image, output_path = "./"):
             saved_paths.append(file_path)  # 저장된 각 파일의 경로를 리스트에 추가
 
     return saved_paths
+
+segmentImage('Skt-Greedot-backend/animation/char7/texture.png')
 

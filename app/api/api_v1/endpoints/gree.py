@@ -3,7 +3,9 @@ import shutil
 from typing import List
 
 from fastapi import Depends, HTTPException, APIRouter, File, UploadFile
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+
 
 from pydantic import BaseModel
 
@@ -24,7 +26,6 @@ from app.database import get_db
 
 router = APIRouter()
 
-
 @router.post('/upload-raw-img')
 async def upload_raw_img(
         file: UploadFile = File(...),
@@ -38,7 +39,7 @@ async def upload_raw_img(
         raw_img=file_url,
         member_id=member_id,
         isFavorite=False,
-        status="activate"
+        status= "activate"
     )
     db.add(gree_data)
     await db.commit()  # 커밋하여 트랜잭션을 완료
@@ -54,6 +55,7 @@ class SuccessMessage(BaseModel):
 @router.put('/update/{gree_id}', response_model=SuccessMessage)
 async def update_gree(gree_id: int, gree_update: GreeUpdate, current_user: Member = Depends(get_current_user),
                       db: AsyncSession = Depends(get_db)):
+
     user = await crud_get_user(db, current_user.id)
     if not user:
         raise HTTPException(status_code=401, detail="Invalid or expired token")
@@ -88,6 +90,7 @@ async def read_gree(gree_id: int, current_user: Member = Depends(get_current_use
 @router.put('/disable/{gree_id}', response_model=SuccessMessage)
 async def disable_gree(gree_id: int, current_user: Member = Depends(get_current_user),
                        db: AsyncSession = Depends(get_db)):
+
     user = await crud_get_user(db, current_user.id)
     if not user:
         raise HTTPException(status_code=401, detail="Invalid or expired token")
@@ -95,6 +98,7 @@ async def disable_gree(gree_id: int, current_user: Member = Depends(get_current_
     await crud_update_gree_status(db, gree_id=gree_id, user_id=user.id, new_status="DISABLED")
 
     return {"message": "Gree disabled successfully"}
+
 
 
 async def download_image_async(image_url: str, local_file_path: str):
@@ -106,6 +110,18 @@ async def download_image_async(image_url: str, local_file_path: str):
                 await f.close()
             else:
                 raise Exception(f"Failed to download image. Status code: {response.status}")
+
+
+async def download_and_save_file(url: str, destination: str):
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                # 파일을 바이너리 쓰기 모드로 열고 내용을 씁니다.
+                async with aiofiles.open(destination, mode='wb') as file:
+                    await file.write(await response.read())
+            else:
+                raise HTTPException(status_code=response.status, detail="Failed to download file.")
 
 
 @router.post("/greefile/upload/{gree_id}")
@@ -184,3 +200,52 @@ async def upload_yaml(
     os.remove(local_file_path)
 
     return {"message": "YAML file uploaded successfully", "url": file_url}
+
+
+@router.post("/create-and-upload-assets/{gree_id}")
+async def create_and_upload_assets(
+        gree_id: int,
+        current_user: Member = Depends(get_current_user),
+        db: AsyncSession = Depends(get_db)):
+
+    # gree 객체 조회
+    gree_result = await db.execute(select(SQLAlchemyGree).where(SQLAlchemyGree.id == gree_id))
+    gree = gree_result.scalars().first()
+    if not gree:
+        raise HTTPException(status_code=404, detail="Gree not found")
+
+    # gree_file 객체에서 yaml 파일 조회
+    gree_file_result = await db.execute(
+        select(GreeFile)
+        .where(GreeFile.gree_id == gree_id, GreeFile.file_type == 'yaml')
+    )
+    gree_yaml_file = gree_file_result.scalars().first()
+    if not gree_yaml_file:
+        raise HTTPException(status_code=404, detail="YAML file not found")
+
+    # gree_file 객체에서 img 파일 조회
+    gree_img_result = await db.execute(
+        select(GreeFile)
+        .where(GreeFile.gree_id == gree_id, GreeFile.file_type == 'img')
+    )
+    gree_img_file = gree_img_result.scalars().first()
+    if not gree_img_file:
+        raise HTTPException(status_code=404, detail="Image file not found")
+
+    # 파일 다운로드 및 저장 경로 설정
+    base_path = 'animation/char7'
+    os.makedirs(base_path, exist_ok=True)  # 디렉토리가 없으면 생성
+
+    # YAML 파일 다운로드 및 저장
+    yaml_file_path = os.path.join(base_path, 'char_cfg.yaml')
+    await download_and_save_file(gree_yaml_file.real_name, yaml_file_path)
+
+    # 이미지 파일 다운로드 및 저장
+    img_file_path = os.path.join(base_path, 'mask.png')
+    await download_and_save_file(gree_img_file.real_name, img_file_path)
+
+    # texture.png (raw_img) 다운로드 및 저장
+    texture_file_path = os.path.join(base_path, 'texture.png')
+    await download_and_save_file(gree.raw_img, texture_file_path)
+
+    return {"message": "Assets downloaded and saved successfully"}
