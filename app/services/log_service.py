@@ -36,3 +36,4 @@ async def get_logs_by_gree_service(db: AsyncSession, gree_id: int):
         result = await session.execute(select(Log).where(Log.gree_id == gree_id))
         logs = result.scalars().all()
         return logs
+    

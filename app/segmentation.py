@@ -87,5 +87,5 @@ def segmentImage(image_path, output_path = "./"):
 
     return saved_paths
 
-segmentImage('Skt-Greedot-backend/animation/char7/texture.png')
+segmentImage('animation/char7/texture.png')
 

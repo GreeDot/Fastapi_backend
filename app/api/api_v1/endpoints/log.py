@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 
 from app.database import get_db
-from app.services.log_service import (create_log_service, get_log_service, get_logs_service, delete_log_service)
+from app.services.log_service import (create_log_service, get_log_service, get_logs_by_gree_service, get_logs_service, delete_log_service)
 from app.schemas.LogDto import CreateLogDto, LogResponseDto
 
 router = APIRouter()
