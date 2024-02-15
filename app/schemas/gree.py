@@ -12,7 +12,6 @@ class GreeUpdate(BaseModel):
     status: Optional[StatusEnum] = None
     isFavorite: Optional[bool] = None
 
-
 class Gree(BaseModel):
     member_id: int
     gree_name: Optional[str] = Field(default=None)
