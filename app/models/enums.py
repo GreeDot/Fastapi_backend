@@ -38,3 +38,12 @@ class FileTypeEnum(PyEnum):
 class EmotionTypeEnum(PyEnum):
     HAPPY = "HAPPY"
     UNHAPPY = "UNHAPPY"
+
+@unique
+class VoiceTypeEnum(PyEnum):
+    ALLOY = 'alloy'
+    ECHO = 'echo'
+    FABLE = 'fable'
+    ONYX = 'onyx'
+    NOVA = 'nova'
+    SHIMMER = 'shimmer'

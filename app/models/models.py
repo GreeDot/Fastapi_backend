@@ -2,7 +2,7 @@
 from sqlalchemy import Column, Integer, String, DateTime, Enum, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-from app.models.enums import RoleEnum, StatusEnum, GradeEnum, LogTypeEnum, FileTypeEnum
+from app.models.enums import RoleEnum, StatusEnum, GradeEnum, LogTypeEnum, FileTypeEnum, VoiceTypeEnum
 from datetime import datetime
 
 Base = declarative_base()
@@ -34,6 +34,8 @@ class Gree(Base):
     prompt_mbti = Column(String(255))
     status = Column(Enum(StatusEnum))
     isFavorite = Column(Boolean, default=False)
+    # 그리는 프롬프트 엔지니어링을 통해 다음과 같이 TTS의 목소리가 결정되어야한다.
+    voice_type = Column(Enum(VoiceTypeEnum), default=VoiceTypeEnum.ALLOY)
     register_at = Column(DateTime, nullable=False, default=datetime.now())
 
     member = relationship("Member", back_populates="gree")
@@ -62,6 +64,8 @@ class Log(Base):
     gree_id = Column(Integer, ForeignKey('gree.gree_id'), nullable=False)
     log_type = Column(Enum(LogTypeEnum), nullable=False)
     content = Column(String(1000))
+    # "GREE_TALK"일 경우 음성데이터가 Azure에 업로드 되어야한다.
+    voice_url = Column(String(255))
     register_at = Column(DateTime, nullable=False, default=datetime.now())
 
     gree = relationship("Gree", back_populates="log")

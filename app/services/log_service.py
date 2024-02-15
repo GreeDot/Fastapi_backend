@@ -1,18 +1,22 @@
 # services/log_service.py
 from typing import List, Optional
+from sqlalchemy import null
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException
 from app.crud.crud_log import (create_log as crud_create_log,
                           get_log as crud_get_log,
                           get_logs as crud_get_logs,
-                          update_log as crud_update_log,
                           delete_log as crud_delete_log)
-from app.schemas.LogDto import CreateLogDto
+from app.schemas.LogDto import CreateGreeTalkLogDto, CreateUserTalkLogDto
 from app.models.models import Log
 from sqlalchemy.future import select
 
-async def create_log_service(db: AsyncSession, log_dto: CreateLogDto) -> Log:
-    db_log = await crud_create_log(db, log_dto.gree_id, log_dto.log_type, log_dto.content)
+async def create_usertalk_log_service(db: AsyncSession, log_dto: CreateUserTalkLogDto) -> Log:
+    db_log = await crud_create_log(db, log_dto.gree_id, log_dto.log_type, log_dto.content, null)
+    return db_log
+
+async def create_greetalk_log_service(db: AsyncSession, log_dto: CreateGreeTalkLogDto) -> Log:
+    db_log = await crud_create_log(db, log_dto.gree_id, log_dto.log_type, log_dto.content, log_dto.voice_url)
     return db_log
 
 async def get_log_service(db: AsyncSession, log_id: int) -> Optional[Log]:
