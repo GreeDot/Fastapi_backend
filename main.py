@@ -10,6 +10,8 @@ from app.core.config import settings
 from alembic.config import Config
 from alembic import command
 
+from app.models import init_db
+
 app = FastAPI()
 
 # CORS 미들웨어 설정
@@ -24,12 +26,6 @@ app.add_middleware(
 # API 라우터를 앱에 포함
 app.include_router(api_router, prefix=settings.API_v1_STR)
 
-def run_alembic_upgrade():
-    """Alembic을 사용하여 자동으로 리비전을 생성하고 데이터베이스를 최신 상태로 마이그레이션합니다."""
-    alembic_cfg = Config("alembic.ini")
-    command.revision(alembic_cfg, message="Add tables", autogenerate=True)
-    command.upgrade(alembic_cfg, "head")
-
 if __name__ == "__main__":
-    # run_alembic_upgrade()
+    # init_db()
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True, log_level="debug")

@@ -1,9 +1,9 @@
-from typing import List
+from typing import List, Optional
 
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.models import Gree as GreeModel
-from app.schemas.gree import GreeUpdate, Gree
+from app.schemas.gree import GreeUpdate
 
 async def crud_update_gree(db: AsyncSession, gree_id: int, gree_update: GreeUpdate) -> GreeModel:
     async with db as session:
@@ -42,3 +42,10 @@ async def crud_update_gree_status(db: AsyncSession, gree_id: int, user_id: int, 
         gree = result.scalar()
         gree.status = new_status
         await session.commit()
+
+async def crud_get_gree_by_id_only(db: AsyncSession, gree_id: int) -> Optional[GreeModel]:
+    async with db as session:
+        query = select(GreeModel).filter(GreeModel.id == gree_id)
+        result = await session.execute(query)
+        gree = result.scalar()
+        return gree
