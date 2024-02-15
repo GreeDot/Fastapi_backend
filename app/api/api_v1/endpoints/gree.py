@@ -14,7 +14,7 @@ import aiofiles
 import uuid
 
 from app.services.upload_service import upload_file_to_azure, upload_greefile_to_azure, \
-    upload_yaml_to_azure_blob
+    upload_yaml_to_azure_blob, upload_gif_to_azure_blob
 from app.api.api_v1.endpoints.user import get_current_user
 from app.schemas.gree import GreeUpdate, Gree
 from app.segmentation import segmentImage
@@ -202,6 +202,13 @@ async def upload_yaml(
     return {"message": "YAML file uploaded successfully", "url": file_url}
 
 
+def create_gif():
+    from animated_drawings import render
+    # 이 경로는 실제 YAML 파일의 위치에 따라 조정해야 합니다.
+    render.start('./animation/char7/export_gif_example.yaml')
+    return './temp/video.gif'
+
+
 @router.post("/create-and-upload-assets/{gree_id}")
 async def create_and_upload_assets(
         gree_id: int,
@@ -249,5 +256,12 @@ async def create_and_upload_assets(
     await download_and_save_file(gree.raw_img, texture_file_path)
 
 
+    # GIF 생성
+    gif_path = create_gif()  # GIF 생성 함수 호출
 
-    return {"message": "Assets downloaded and saved successfully"}
+    # GIF 파일 Azure에 업로드
+    uploaded_gif_url = await upload_gif_to_azure_blob(gif_path)  # 비동기 업로드 함수 호출
+
+
+
+    return {"message": "Assets and GIF uploaded successfully", "gif_url": uploaded_gif_url}

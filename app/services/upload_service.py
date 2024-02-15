@@ -83,3 +83,22 @@ async def upload_yaml_to_azure_blob(local_file_path: str) -> str:
     # 업로드된 파일의 URL 반환
     blob_url = blob_client.url
     return blob_url
+
+
+async def upload_gif_to_azure_blob(local_file_path: str) -> str:
+    container_name = "greefile"
+    AZURE_ACCOUNT_KEY = os.getenv("AZURE_ACCOUNT_KEY")
+
+    connection_string = f"DefaultEndpointsProtocol=https;AccountName=greedotstorage;AccountKey={AZURE_ACCOUNT_KEY};EndpointSuffix=core.windows.net"
+    blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+
+    file_name = os.path.basename(local_file_path)
+    unique_file_name = f"{uuid.uuid4()}_{file_name}"
+
+    blob_client = blob_service_client.get_blob_client(container=container_name, blob=unique_file_name)
+
+    with open(local_file_path, "rb") as data:
+        blob_client.upload_blob(data, overwrite=True, content_settings=ContentSettings(content_type='image/gif'))
+
+    blob_url = blob_client.url
+    return blob_url
