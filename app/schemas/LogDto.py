@@ -4,10 +4,16 @@ from pydantic import BaseModel
 from app.models.enums import LogTypeEnum
 
 # 생성을 위한 DTO
-class CreateLogDto(BaseModel):
+class CreateUserTalkLogDto(BaseModel):
     gree_id: int
     log_type: LogTypeEnum
     content: str
+
+class CreateGreeTalkLogDto(BaseModel):
+    gree_id: int
+    log_type: LogTypeEnum
+    content: str
+    voice_url: str # azure
 
 # 응답을 위한 DTO
 class LogResponseDto(BaseModel):

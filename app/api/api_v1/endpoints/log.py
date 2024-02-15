@@ -3,14 +3,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 
 from app.database import get_db
-from app.services.log_service import (create_log_service, get_log_service, get_logs_by_gree_service, get_logs_service, delete_log_service)
-from app.schemas.LogDto import CreateLogDto, LogResponseDto
+from app.services.log_service import (create_usertalk_log_service, get_log_service, get_logs_by_gree_service, get_logs_service, delete_log_service)
+from app.schemas.LogDto import CreateUserTalkLogDto, LogResponseDto
 
 router = APIRouter()
 
 @router.post("/", response_model=LogResponseDto)
-async def create_log(log_dto: CreateLogDto, db: AsyncSession = Depends(get_db)):
-    return await create_log_service(db, log_dto)
+async def create_log(log_dto: CreateUserTalkLogDto, db: AsyncSession = Depends(get_db)):
+    return await create_usertalk_log_service(db, log_dto)
 
 @router.get("/{log_id}", response_model=LogResponseDto)
 async def read_log(log_id: int, db: AsyncSession = Depends(get_db)):

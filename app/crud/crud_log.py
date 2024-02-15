@@ -4,11 +4,12 @@ from sqlalchemy.future import select
 from app.models.models import Log  # 모델 파일 경로에 따라 수정해야 할 수 있음
 
 # 로그 생성
-async def create_log(db: AsyncSession, gree_id: int, log_type, content: str):
+async def create_log(db: AsyncSession, gree_id: int, log_type, content: str, voice_url: str):
     db_log = Log(
         gree_id=gree_id,
         log_type=log_type,
         content=content,
+        voice_url=voice_url,
         register_at=datetime.now()
     )
     db.add(db_log)
