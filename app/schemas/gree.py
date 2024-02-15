@@ -21,6 +21,6 @@ class Gree(BaseModel):
     prompt_mbti: Optional[str] = None
     status: StatusEnum
     isFavorite: bool
-
+    
     class Config:
         from_attributes = True
