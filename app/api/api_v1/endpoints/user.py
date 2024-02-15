@@ -1,5 +1,5 @@
 # app/api/api_v1/endpoints/user.py
-import jwt
+from jose import jwt
 from fastapi.security import OAuth2PasswordRequestForm
 from jose.exceptions import JWTError
 from fastapi import APIRouter, HTTPException, Depends, status

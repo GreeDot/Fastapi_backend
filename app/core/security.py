@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Optional
 from jose import JWTError
-import jwt
+from jose import jwt
 from fastapi.security import OAuth2PasswordBearer
 import bcrypt
 from fastapi import Depends, HTTPException, status
