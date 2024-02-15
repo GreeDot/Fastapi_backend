@@ -248,4 +248,6 @@ async def create_and_upload_assets(
     texture_file_path = os.path.join(base_path, 'texture.png')
     await download_and_save_file(gree.raw_img, texture_file_path)
 
+
+
     return {"message": "Assets downloaded and saved successfully"}
