@@ -6,9 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b46cffd0-046b-4a51-ad6f-82b087c02435" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/animation/char7/char_cfg.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/animation/char7/char_cfg.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/animation/char7/mask.png" beforeDir="false" afterPath="$PROJECT_DIR$/animation/char7/mask.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/animation/char7/texture.png" beforeDir="false" afterPath="$PROJECT_DIR$/animation/char7/texture.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/api/api_v1/endpoints/gree.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/api_v1/endpoints/gree.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -265,7 +262,7 @@
       <workItem from="1707825500172" duration="2527000" />
       <workItem from="1707874817897" duration="23129000" />
       <workItem from="1707955281986" duration="6006000" />
-      <workItem from="1708042127246" duration="5451000" />
+      <workItem from="1708042127246" duration="6402000" />
     </task>
     <servers />
   </component>
