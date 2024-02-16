@@ -10,7 +10,7 @@ There are four different types of configuration files:
 ## <a name="mvc"></a>MVC Config File
 This is the top-level configuration file, passed into `render.start()` to generate the animation. All parameters and options not specifically related to the Animated Drawing character, the BVH file, or the retargeting process go in here.
 Such parameters belong to one of three subgroups, in alignment with the Model-View-Controller design pattern. (Note: the 'Model' element of MVC is referred to as 'scene')
-Most of the available parameters are defined in [animated_drawings/mvc_base_cfg.yaml](../../animated_drawings/mvc_base_cfg.yaml). This file should **not** be changed. Instead, create a new mvc config file containing *only* the parameters that need to be modified.
+Most of the available parameters are defined in [animated_drawings/mvc_base_cfg.yaml](../../../animated_drawings/mvc_base_cfg.yaml). This file should **not** be changed. Instead, create a new mvc config file containing *only* the parameters that need to be modified.
 The rendering script will read the initial parameters from `mvc_base_cfg.yaml` and overwrite any parameters specified within the new mvc config file. 
 See the [example mvc config files](mvc) for examples.
 
