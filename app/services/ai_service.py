@@ -85,7 +85,7 @@ async def chat_with_openai_service(db: AsyncSession, chat_request: ChatRequestDt
 
     try:
         completion = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model="ft:gpt-3.5-turbo-0613:personal::8sn4jyEw",
             temperature=1.5,
             top_p=0.7,
             frequency_penalty=0.3,
