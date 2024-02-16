@@ -242,7 +242,6 @@ async def create_and_upload_assets(
     # 파일 다운로드 및 저장 경로 설정
     base_path = 'animation/char7'
     os.makedirs(base_path, exist_ok=True)  # 디렉토리가 없으면 생성
-    print('1')
 
     # YAML 파일 다운로드 및 저장
     yaml_file_path = os.path.join(base_path, 'char_cfg.yaml')
