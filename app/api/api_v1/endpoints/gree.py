@@ -205,7 +205,7 @@ async def upload_yaml(
 def create_gif():
     from animated_drawings import render
     # 이 경로는 실제 YAML 파일의 위치에 따라 조정해야 합니다.
-    render.start('export_gif_example.yaml')
+    render.start('animation/export_gif_example.yaml')
     return './temp/video.gif'
 
 
@@ -242,6 +242,7 @@ async def create_and_upload_assets(
     # 파일 다운로드 및 저장 경로 설정
     base_path = 'animation/char7'
     os.makedirs(base_path, exist_ok=True)  # 디렉토리가 없으면 생성
+    print('1')
 
     # YAML 파일 다운로드 및 저장
     yaml_file_path = os.path.join(base_path, 'char_cfg.yaml')
