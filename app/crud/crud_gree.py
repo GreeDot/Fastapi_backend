@@ -24,7 +24,7 @@ async def crud_get_grees(db: AsyncSession, user_id: int) -> List[GreeModel]:
         query = select(GreeModel).filter(GreeModel.member_id == user_id, GreeModel.status == "activate")
         result = await session.execute(query)
         grees = result.scalars().all()
-        return grees
+        return greesx
 
 
 async def crud_get_gree_by_id(db: AsyncSession, gree_id: int, user_id: int) -> GreeModel:

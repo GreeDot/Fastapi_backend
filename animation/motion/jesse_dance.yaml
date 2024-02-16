@@ -1,4 +1,4 @@
-filepath: examples/bvh/rokoko/jesse_dance.bvh
+filepath: animation/bvh/rokoko/jesse_dance.bvh
 start_frame_idx: 0
 end_frame_idx: null
 groundplane_joint: LeftFoot
