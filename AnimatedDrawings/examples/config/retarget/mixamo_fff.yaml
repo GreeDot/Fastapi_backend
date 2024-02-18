@@ -4,11 +4,9 @@ bvh_projection_bodypart_groups:
   - LeftArm
   - LeftForeArm
   - LeftHand
-  - LeftInHandIndex
   - RightArm
   - RightForeArm
   - RightHand
-  - RightInHandIndex
   method: frontal
   name: Upper Limbs
 - bvh_joint_names:

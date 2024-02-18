@@ -202,11 +202,11 @@ async def upload_yaml(
     return {"message": "YAML file uploaded successfully", "url": file_url}
 
 
-def create_gif():
+def create_gif(option):
     from animated_drawings import render
     # 이 경로는 실제 YAML 파일의 위치에 따라 조정해야 합니다.
-    render.start('./animation/export_gif_example.yaml')
-    return './temp/video.gif'
+    render.start(f'AnimatedDrawings/examples/config/mvc/gree_{option}.yaml')
+    return f'./temp/{option}.gif'
 
 
 @router.post("/create-and-upload-assets/{gree_id}")
@@ -240,7 +240,7 @@ async def create_and_upload_assets(
         raise HTTPException(status_code=404, detail="Image file not found")
 
     # 파일 다운로드 및 저장 경로 설정
-    base_path = 'animation/char7'
+    base_path = '/animation/char7'
     os.makedirs(base_path, exist_ok=True)  # 디렉토리가 없으면 생성
 
     # YAML 파일 다운로드 및 저장
@@ -255,13 +255,23 @@ async def create_and_upload_assets(
     texture_file_path = os.path.join(base_path, 'texture.png')
     await download_and_save_file(gree.raw_img, texture_file_path)
 
+    gif_list = ['dab', 'walk', 'wave', 'bounce']
+    gif_url_list = []
+    for i in gif_list:
+        gif_path = create_gif(i)
 
-    # GIF 생성
-    gif_path = create_gif()  # GIF 생성 함수 호출
+        uploaded_gif_url = await upload_gif_to_azure_blob(gif_path)
 
-    # GIF 파일 Azure에 업로드
-    uploaded_gif_url = await upload_gif_to_azure_blob(gif_path)  # 비동기 업로드 함수 호출
+        gif_url_list.append(uploaded_gif_url)
 
+        gree_file = GreeFile(
+            gree_id=gree_id,
+            file_type='GIF',
+            file_name= i,
+            real_name=uploaded_gif_url,
+        )
+        db.add(gree_file)
+        await db.commit()
+        await db.refresh(gree_file)
 
-
-    return {"message": "Assets and GIF uploaded successfully", "gif_url": uploaded_gif_url}
+    return {"message": "Assets and GIFs uploaded successfully", "gif_url_list": gif_url_list}
