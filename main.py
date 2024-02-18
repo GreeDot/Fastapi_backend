@@ -6,9 +6,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.router import api_router
 from app.core.config import settings
 
-# Alembic 관련 임포트
-from alembic.config import Config
-from alembic import command
 
 from app.models import init_db
 
