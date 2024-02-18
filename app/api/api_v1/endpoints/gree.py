@@ -205,7 +205,7 @@ async def upload_yaml(
 def create_gif():
     from animated_drawings import render
     # 이 경로는 실제 YAML 파일의 위치에 따라 조정해야 합니다.
-    render.start('./animation/char7/export_gif_example.yaml')
+    render.start('./animation/export_gif_example.yaml')
     return './temp/video.gif'
 
 
