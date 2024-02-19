@@ -13,10 +13,11 @@ import aiohttp
 import aiofiles
 import uuid
 
+from app.schemas.greeFileDto import GreeFileSchema
 from app.services.upload_service import upload_file_to_azure, upload_greefile_to_azure, \
     upload_yaml_to_azure_blob, upload_gif_to_azure_blob
 from app.api.api_v1.endpoints.user import get_current_user
-from app.schemas.gree import GreeUpdate, Gree
+from app.schemas.greeDto import GreeUpdate, Gree
 from app.segmentation import segmentImage
 from app.models.models import Member, GreeFile
 from app.models.models import Gree as SQLAlchemyGree
@@ -265,3 +266,19 @@ async def create_and_upload_assets(
 
 
     return {"message": "Assets and GIF uploaded successfully", "gif_url": uploaded_gif_url}
+
+
+
+@router.get("/getgif/{gree_id}", response_model=List[GreeFileSchema])
+async def read_gree_gifs(gree_id: int, current_user: Member = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    async with db as session:
+        result = await session.execute(
+            select(GreeFile)
+            .where(GreeFile.gree_id == gree_id, GreeFile.file_type == 'GIF')
+        )
+        gree_files = result.scalars().all()
+
+        if not gree_files:
+            raise HTTPException(status_code=404, detail="No GIF files found for the specified Gree")
+
+        return gree_files

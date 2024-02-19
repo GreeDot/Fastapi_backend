@@ -5,9 +5,16 @@ FROM python:3.10
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Python 설치 및 pip 업그레이드
-RUN apt-get update && apt-get install -y libgl1-mesa-glx
-RUN apt-get install -y python3 python3-pip
-RUN pip3 install --upgrade pip
+RUN apt-get update && apt-get install -y libgl1-mesa-glx\
+    apt-get install -y python3 python3-pip\
+    apt-get install --no-install-recommends -y\
+    libosmesa6-dev freeglut3-dev  \
+    libglfw3-dev libgles2-mesa-dev \
+    libosmesa6 \
+    libglib2.0-0 libsm6 libxrender1 libxext6 \
+    ffmpeg libavcodec-extra \
+    && rm -rf /var/lib/apt/lists/*\
+    pip3 install --upgrade pip
 
 # 작업 디렉토리 설정
 WORKDIR /workdir
