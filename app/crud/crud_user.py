@@ -3,7 +3,7 @@ from sqlalchemy.future import select
 
 from app.core.security import hash_password
 from app.models.models import Member
-from app.schemas.user import UserUpdate
+from app.schemas.userDto import UserUpdate
 
 
 async def get_user(db: AsyncSession, user_id: int):

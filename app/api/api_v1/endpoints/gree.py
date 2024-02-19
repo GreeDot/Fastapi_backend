@@ -1,3 +1,4 @@
+import asyncio
 import os
 import shutil
 from typing import List
@@ -5,7 +6,7 @@ from typing import List
 from fastapi import Depends, HTTPException, APIRouter, File, UploadFile
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from concurrent.futures import ProcessPoolExecutor
 
 from pydantic import BaseModel
 
@@ -13,16 +14,18 @@ import aiohttp
 import aiofiles
 import uuid
 
+from app.schemas.greeFileDto import GreeFileSchema
 from app.services.upload_service import upload_file_to_azure, upload_greefile_to_azure, \
     upload_yaml_to_azure_blob, upload_gif_to_azure_blob
 from app.api.api_v1.endpoints.user import get_current_user
-from app.schemas.gree import GreeUpdate, Gree
+from app.schemas.greeDto import GreeUpdate, Gree
 from app.segmentation import segmentImage
 from app.models.models import Member, GreeFile
 from app.models.models import Gree as SQLAlchemyGree
 from app.crud.crud_gree import crud_get_grees, crud_update_gree, crud_get_gree_by_id, crud_update_gree_status
 from app.crud.crud_user import get_user as crud_get_user
 from app.database import get_db
+from animated_drawings import render
 
 router = APIRouter()
 
@@ -201,13 +204,24 @@ async def upload_yaml(
 
     return {"message": "YAML file uploaded successfully", "url": file_url}
 
+def create_gif_wrapper(options):
+    results = []
+    for option in options:
+        result = create_gif(option)
+        results.append(result)
+    return results
 
-def create_gif():
-    from AnimatedDrawings.animated_drawings import render
-    # 이 경로는 실제 YAML 파일의 위치에 따라 조정해야 합니다.
-    render.start('animation/export_gif_example.yaml')
-    return './temp/video.gif'
+def create_gif(option):
+    render.start(f'AnimatedDrawings/examples/config/mvc/gree_{option}.yaml')
+    return f'./temp/{option}.gif'
 
+# 멀티프로세싱을 사용하여 GIF 생성
+async def run_create_gif(options):
+    loop = asyncio.get_running_loop()
+    with ProcessPoolExecutor() as executor:
+        futures = [loop.run_in_executor(executor, create_gif, option) for option in options]
+        results = await asyncio.gather(*futures)
+    return results
 
 @router.post("/create-and-upload-assets/{gree_id}")
 async def create_and_upload_assets(
@@ -215,13 +229,11 @@ async def create_and_upload_assets(
         current_user: Member = Depends(get_current_user),
         db: AsyncSession = Depends(get_db)):
 
-    # gree 객체 조회
     gree_result = await db.execute(select(SQLAlchemyGree).where(SQLAlchemyGree.id == gree_id))
     gree = gree_result.scalars().first()
     if not gree:
         raise HTTPException(status_code=404, detail="Gree not found")
 
-    # gree_file 객체에서 yaml 파일 조회
     gree_file_result = await db.execute(
         select(GreeFile)
         .where(GreeFile.gree_id == gree_id, GreeFile.file_type == 'YAML')
@@ -230,7 +242,6 @@ async def create_and_upload_assets(
     if not gree_yaml_file:
         raise HTTPException(status_code=404, detail="YAML file not found")
 
-    # gree_file 객체에서 img 파일 조회
     gree_img_result = await db.execute(
         select(GreeFile)
         .where(GreeFile.gree_id == gree_id, GreeFile.file_type == 'IMG')
@@ -239,29 +250,53 @@ async def create_and_upload_assets(
     if not gree_img_file:
         raise HTTPException(status_code=404, detail="Image file not found")
 
-    # 파일 다운로드 및 저장 경로 설정
-    base_path = '/animation/char7'
-    os.makedirs(base_path, exist_ok=True)  # 디렉토리가 없으면 생성
+    base_path = 'AnimatedDrawings/examples/characters/char7'
+    os.makedirs(base_path, exist_ok=True)
 
-    # YAML 파일 다운로드 및 저장
     yaml_file_path = os.path.join(base_path, 'char_cfg.yaml')
     await download_and_save_file(gree_yaml_file.real_name, yaml_file_path)
 
-    # 이미지 파일 다운로드 및 저장
     img_file_path = os.path.join(base_path, 'mask.png')
     await download_and_save_file(gree_img_file.real_name, img_file_path)
 
-    # texture.png (raw_img) 다운로드 및 저장
     texture_file_path = os.path.join(base_path, 'texture.png')
     await download_and_save_file(gree.raw_img, texture_file_path)
 
+    gif_list = ['dab', 'walk', 'wave', 'bounce']
 
-    # GIF 생성
-    gif_path = create_gif()  # GIF 생성 함수 호출
+    gif_paths = await run_create_gif(gif_list)
 
-    # GIF 파일 Azure에 업로드
-    uploaded_gif_url = await upload_gif_to_azure_blob(gif_path)  # 비동기 업로드 함수 호출
+    gif_url_list = []
+    for i in gif_paths:
+
+        uploaded_gif_url = await upload_gif_to_azure_blob(i)
+
+        gif_url_list.append(uploaded_gif_url)
+
+        gree_file = GreeFile(
+            gree_id=gree_id,
+            file_type='GIF',
+            file_name= i,
+            real_name=uploaded_gif_url,
+        )
+        db.add(gree_file)
+
+    await db.commit()
+
+    return {"message": "Assets and GIF uploaded successfully", "gif_url": gif_url_list}
 
 
 
-    return {"message": "Assets and GIF uploaded successfully", "gif_url": uploaded_gif_url}
+@router.get("/getgif/{gree_id}", response_model=List[GreeFileSchema])
+async def read_gree_gifs(gree_id: int, current_user: Member = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    async with db as session:
+        result = await session.execute(
+            select(GreeFile)
+            .where(GreeFile.gree_id == gree_id, GreeFile.file_type == 'GIF')
+        )
+        gree_files = result.scalars().all()
+
+        if not gree_files:
+            raise HTTPException(status_code=404, detail="No GIF files found for the specified Gree")
+
+        return gree_files
