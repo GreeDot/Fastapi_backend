@@ -40,4 +40,13 @@ async def get_logs_by_gree_service(db: AsyncSession, gree_id: int):
         result = await session.execute(select(Log).where(Log.gree_id == gree_id))
         logs = result.scalars().all()
         return logs
-    
+
+async def get_user_talk_contents_by_gree_id(gree_id: int, db: AsyncSession) -> List[str]:
+    result = await db.execute(select(Log).where(Log.gree_id == gree_id, Log.log_type == "USER_TALK"))
+    logs = result.scalars().all()
+
+    if not logs:
+        return []
+
+    sentences = [log.content for log in logs]
+    return sentences
