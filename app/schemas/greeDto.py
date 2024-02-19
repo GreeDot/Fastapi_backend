@@ -13,6 +13,7 @@ class GreeUpdate(BaseModel):
     isFavorite: Optional[bool] = None
 
 class Gree(BaseModel):
+    id: int
     member_id: int
     gree_name: Optional[str] = Field(default=None)
     raw_img: str
