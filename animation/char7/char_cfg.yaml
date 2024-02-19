@@ -2,82 +2,82 @@ height: 400
 skeleton:
 - loc:
   - 172
-  - 293
+  - 255
   name: root
   parent: null
 - loc:
-  - 174
-  - 229
+  - 171
+  - 324
   name: hip
   parent: root
 - loc:
-  - 158
-  - 166
+  - 174
+  - 261
   name: torso
   parent: hip
 - loc:
-  - 148
-  - 91
+  - 167
+  - 182
   name: neck
   parent: torso
 - loc:
-  - 112
-  - 146
+  - 97
+  - 234
   name: right_shoulder
   parent: torso
 - loc:
-  - 108
-  - 174
+  - 61
+  - 261
   name: right_elbow
   parent: right_shoulder
 - loc:
-  - 77
-  - 205
+  - 28
+  - 302
   name: right_hand
   parent: right_elbow
 - loc:
-  - 211
-  - 147
+  - 244
+  - 201
   name: left_shoulder
   parent: torso
 - loc:
-  - 246
-  - 163
+  - 296
+  - 245
   name: left_elbow
   parent: left_shoulder
 - loc:
-  - 265
-  - 198
+  - 337
+  - 303
   name: left_hand
   parent: left_elbow
 - loc:
-  - 130
-  - 283
+  - 114
+  - 320
   name: right_hip
   parent: root
 - loc:
-  - 115
-  - 314
+  - 91
+  - 366
   name: right_knee
   parent: right_hip
 - loc:
-  - 98
-  - 364
+  - 67
+  - 399
   name: right_foot
   parent: right_knee
 - loc:
-  - 214
-  - 283
+  - 220
+  - 320
   name: left_hip
   parent: root
 - loc:
-  - 209
-  - 321
+  - 257
+  - 349
   name: left_knee
   parent: left_hip
 - loc:
-  - 214
-  - 365
+  - 290
+  - 392
   name: left_foot
   parent: left_knee
 width: 400

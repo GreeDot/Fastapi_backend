@@ -1,11 +1,11 @@
-filepath: animation/fair1/jumping.bvh
-start_frame_idx: 150
-end_frame_idx: 654 
+filepath: examples/bvh/rokoko/bounce_mixamo.bvh
+start_frame_idx: 0
+end_frame_idx: null
 groundplane_joint: LeftFoot
 forward_perp_joint_vectors:
   - - LeftShoulder
     - RightShoulder
   - - LeftUpLeg
     - RightUpLeg
-scale: 0.025
-up: +z
+scale: 0.005
+up: +y

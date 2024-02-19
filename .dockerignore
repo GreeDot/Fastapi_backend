@@ -1,0 +1,24 @@
+# Git 관련 디렉토리와 파일
+.git
+.gitignore
+
+# GitHub Actions 관련 디렉토리
+.github
+
+# PyCharm 프로젝트 디렉토리
+.idea
+
+# Python 가상 환경 디렉토리
+venv
+
+# pytest 캐시 디렉토리
+.pytest_cache
+
+# Python 바이트코드 파일
+__pycache__
+
+# 불필요한 큰 파일
+anaconda.sh
+
+# 기타 불필요한 디렉토리나 파일
+# 여기에 추가적으로 제외하고 싶은 파일이나 디렉토리를 명시할 수 있습니다.
