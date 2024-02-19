@@ -33,7 +33,7 @@ jobs:
         username: ${{ secrets.AZURE_USERNAME }}
         key: ${{ secrets.AZURE_KEY }}
         script: |
-          sudo bash /home/gosu/update-docker.sh
+          sudo bash /home/gosu/mainserver/update-docker.sh
 
     - name: Cleanup Dangling Docker Images
       uses: appleboy/ssh-action@master
