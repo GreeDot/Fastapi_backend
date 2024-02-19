@@ -4,17 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b46cffd0-046b-4a51-ad6f-82b087c02435" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/schemas/greeFileDto.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/api_v1/endpoints/gree.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/api_v1/endpoints/gree.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/api_v1/endpoints/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/api_v1/endpoints/user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/crud/crud_gree.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/crud/crud_gree.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/crud/crud_user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/crud/crud_user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/schemas/gree.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/schemas/greeDto.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/schemas/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/schemas/userDto.py" afterDir="false" />
-    </list>
+    <list default="true" id="b46cffd0-046b-4a51-ad6f-82b087c02435" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -70,8 +60,8 @@
     &quot;Python.views.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/2022-PC(T)-21/Desktop/Greedot_backend/Skt-Greedot-backend/AnimatedDrawings/examples/characters/char7&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Merging main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/2022-PC(T)-21/Desktop/Greedot_backend/Skt-Greedot-backend&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -273,7 +263,7 @@
       <workItem from="1708053834691" duration="2938000" />
       <workItem from="1708057937138" duration="152000" />
       <workItem from="1708058242378" duration="5736000" />
-      <workItem from="1708067286080" duration="2453000" />
+      <workItem from="1708067286080" duration="2589000" />
     </task>
     <servers />
   </component>
