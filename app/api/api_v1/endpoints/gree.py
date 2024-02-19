@@ -204,7 +204,6 @@ async def upload_yaml(
 
     return {"message": "YAML file uploaded successfully", "url": file_url}
 
-
 def create_gif_wrapper(options):
     results = []
     for option in options:
@@ -215,7 +214,6 @@ def create_gif_wrapper(options):
 def create_gif(option):
     render.start(f'AnimatedDrawings/examples/config/mvc/gree_{option}.yaml')
     return f'./temp/{option}.gif'
-
 
 # 멀티프로세싱을 사용하여 GIF 생성
 async def run_create_gif(options):
