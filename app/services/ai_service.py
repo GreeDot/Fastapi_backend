@@ -54,10 +54,10 @@ async def chat_with_openai_test_service(chat_request):
 # 3. 즉 엔드포인트에서 받아야 할 정보는 gree_id, message 이 둘이면 된다. ✅
 # 4. gree_id, message로 입력받은 것은 "USER_TALK" Log로 남아야 한다. ✅
 # 5. gree_id, message로 출력되는 것은 "GREE_TALK" Log로 데이터베이스에 저장되어야 한다. ✅
-# 6. "GREE_TALK" 메시지는 TTS과정을 거쳐야한다.
-# 7. TTS를 거친 메시지는 Azure에 저장되어야한다.
-# 8. Azure에 저장된 URL은 Log에 저장되어야한다.
-# 9. GREE의 성격을 지정할때(Update Gree) Gree객체의 VoiceTypeEnum이 지정되어야한다.
+# 6. "GREE_TALK" 메시지는 TTS과정을 거쳐야한다. ✅
+# 7. TTS를 거친 메시지는 Azure에 저장되어야한다. ✅
+# 8. Azure에 저장된 URL은 Log에 저장되어야한다. ✅
+# 9. GREE의 성격을 지정할때(Update Gree) Gree객체의 VoiceTypeEnum이 지정되어야한다. ✅
 async def chat_with_openai_service(db: AsyncSession, chat_request: ChatRequestDto):
     gree = await crud_get_gree_by_id_only(db, chat_request.gree_id)
     system_message = (
