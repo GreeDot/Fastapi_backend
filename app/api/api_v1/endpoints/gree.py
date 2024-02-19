@@ -269,7 +269,7 @@ async def create_and_upload_assets(
     gif_paths = await run_create_gif(gif_list)
 
     gif_url_list = []
-    for i in gif_paths:
+    for idx, i in enumerate(gif_paths):
 
         uploaded_gif_url = await upload_gif_to_azure_blob(i)
 
@@ -278,7 +278,7 @@ async def create_and_upload_assets(
         gree_file = GreeFile(
             gree_id=gree_id,
             file_type='GIF',
-            file_name= i,
+            file_name= gif_list[idx],
             real_name=uploaded_gif_url,
         )
         db.add(gree_file)
@@ -294,7 +294,7 @@ async def read_gree_gifs(gree_id: int, current_user: Member = Depends(get_curren
     async with db as session:
         result = await session.execute(
             select(GreeFile)
-            .where(GreeFile.gree_id == gree_id, GreeFile.file_type == 'GIF')
+            .where(GreeFile.gree_id == gree_id, GreeFile.file_type == 'GIF', GreeFile.real_name.isnot(None))
         )
         gree_files = result.scalars().all()
 
