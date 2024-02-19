@@ -275,7 +275,6 @@ async def create_and_upload_assets(
         await db.commit()
         await db.refresh(gree_file)
 
-<<<<<<< HEAD
 
     return {"message": "Assets and GIF uploaded successfully", "gif_url": uploaded_gif_url}
 
@@ -294,6 +293,3 @@ async def read_gree_gifs(gree_id: int, current_user: Member = Depends(get_curren
             raise HTTPException(status_code=404, detail="No GIF files found for the specified Gree")
 
         return gree_files
-=======
-    return {"message": "Assets and GIFs uploaded successfully", "gif_url_list": gif_url_list}
->>>>>>> 0facbdb9a0d1300caf2911c7cc6de1d725bacc75
