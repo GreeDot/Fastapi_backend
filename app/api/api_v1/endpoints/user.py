@@ -1,4 +1,4 @@
-# app/api/api_v1/endpoints/user.py
+# app/api/api_v1/endpoints/userDto.py
 from jose import jwt
 from fastapi.security import OAuth2PasswordRequestForm
 from jose.exceptions import JWTError
@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from typing import List, Optional
 from starlette.responses import JSONResponse
 
-from app.schemas.user import User, UserCreate, UserUpdate
+from app.schemas.userDto import User, UserCreate, UserUpdate
 from app.services.user_service import create_user, user_exists
 from app.core.config import settings
 from app.models.models import Member, RoleEnum, StatusEnum, GradeEnum
