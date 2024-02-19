@@ -21,7 +21,7 @@ async def crud_update_gree(db: AsyncSession, gree_id: int, gree_update: GreeUpda
 
 async def crud_get_grees(db: AsyncSession, user_id: int) -> List[GreeModel]:
     async with db as session:
-        query = select(GreeModel).where(GreeModel.user_id == user_id, GreeModel.name.isnot(None))
+        query = select(GreeModel).where(GreeModel.user_id == user_id, GreeModel.gree_name.isnot(None))
         result = await db.execute(query)
         grees = result.scalars().all()
         return grees
