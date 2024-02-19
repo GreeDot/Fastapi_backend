@@ -2,6 +2,7 @@ import asyncio
 import os
 import shutil
 from typing import List
+from animated_drawings import render
 
 from fastapi import Depends, HTTPException, APIRouter, File, UploadFile
 from sqlalchemy import select

@@ -3,7 +3,8 @@ import httpx
 from app.database import get_db
 from app.schemas.ChatDto import ChatRequestDto, ChatRequestTestDto
 from app.schemas.EmotionDto import MakeEmotionReportRequest, MakeEmotionReportResponse, EmotionsRequest, EmotionsResponse, WordCloudRequest, WordCloudResponse
-from app.services.ai_service import chat_with_openai_service, chat_with_openai_test_service
+from app.services.emotion_service import save_emotion_report
+from app.services.voice_service import chat_with_openai_service, chat_with_openai_test_service
 from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter()
@@ -32,8 +33,8 @@ async def chat_with_openai(chat_request: ChatRequestDto, db: AsyncSession = Depe
 
     return {"chat_response": response}
 
-@router.post("/make-emotion-report", response_model=MakeEmotionReportResponse)
-async def make_emotion_report_api(request: MakeEmotionReportRequest):
+@router.post("/make-emotion-report/{gree_id}", response_model=MakeEmotionReportResponse)
+async def make_emotion_report_api(gree_id: int, request: MakeEmotionReportRequest, db: AsyncSession = Depends(get_db)):
     async with httpx.AsyncClient() as client:
         # 1단계: 감정 예측
         try:
@@ -55,6 +56,8 @@ async def make_emotion_report_api(request: MakeEmotionReportRequest):
         # 'urls' 키가 없는 경우를 처리하기 위한 예외 처리 추가
         if 'urls' not in wordcloud_data:
             raise HTTPException(status_code=500, detail="워드 클라우드 응답에 'urls' 키가 없습니다.")
+
+        await save_emotion_report(gree_id, emotions_data['emotions'], wordcloud_data['urls'], db)
 
         # 최종 응답 반환
         return MakeEmotionReportResponse(emotions=emotions_data['emotions'], urls=wordcloud_data['urls'])
