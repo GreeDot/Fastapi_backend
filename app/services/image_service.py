@@ -19,28 +19,34 @@ connection_string = f'DefaultEndpointsProtocol=https;AccountName=greedotstorage;
 promptDict = {
     1: """
     please make cute
-    This picture was painted by a child.
-    Please change this picture a little bit more cute.
-    I want to keep most of the original.
-    Arms and legs must be in the form of characters.
-    Please don't put your face and body in.
-    I just wish I had one character.
-    And the parts other than the character outline must be a white background, so please make this important.
+    please make cute This picture was painted by a child. 
+    Please change this picture a little bit more cute. 
+    I want to keep most of the original. 
+    Arms and legs must be in the form of characters. 
+    Please don't put your face and body in. I just wish I had one character. 
+    And the parts other than the character outline must be a white background, so please make this important. 
+    white background.
     """,
     2: """
     please make cool
     This picture was painted by a child.
-    Please change this picture a little bit more cute.
-    I want to keep most of the original.
-    Arms and legs must be in the form of characters.
-    Please don't put your face and body in.
-    I just wish I had one character.
-    And the parts other than the character outline must be a white background, so please make this important.
+    Please change this picture a little bit more cute. 
+    I want to keep most of the original. 
+    Arms and legs must be in the form of characters. 
+    Please don't put your face and body in. I just wish I had one character. 
+    And the parts other than the character outline must be a white background, so please make this important. 
+    white background.
     """
 }
 
 async def create_image(promptSelect: int, raw_img_url: str) -> dict:
     prompt = promptDict[promptSelect] + "\n" + raw_img_url
+    prompt += """
+    --no background, shadow, surrounding friend, surrounding objects
+    --quality 0.25
+    --stylize 50
+    """
+    
     headers = {
         'Authorization': f'Bearer {MID_API_KEY}',
         'Content-Type': 'application/json'
