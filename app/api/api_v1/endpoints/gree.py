@@ -16,6 +16,7 @@ import aiofiles
 import uuid
 
 from app.schemas.greeFileDto import GreeFileSchema
+from app.services.image_service import create_image, check_image_status, upload_images_to_azure
 from app.services.upload_service import upload_file_to_azure, upload_greefile_to_azure, \
     upload_yaml_to_azure_blob, upload_gif_to_azure_blob
 from app.api.api_v1.endpoints.user import get_current_user
@@ -54,6 +55,39 @@ async def upload_raw_img(
 
 class SuccessMessage(BaseModel):
     message: str
+
+
+@router.post("/generate-and-upload-image/{gree_id}")
+async def generate_and_upload_image(
+        gree_id: int,
+        promptSelect: int,
+        current_user: Member = Depends(get_current_user),
+        db: AsyncSession = Depends(get_db)):
+
+    gree = await crud_get_gree_by_id(db, gree_id=gree_id, user_id=current_user.id)
+    if not gree:
+        raise HTTPException(status_code=404, detail="Gree not found")
+
+    try:
+        creation_response = await create_image(promptSelect, gree.raw_img)
+        if 'data' not in creation_response or 'id' not in creation_response['data']:
+            raise HTTPException(status_code=500, detail="Failed to initiate image creation.")
+    except Exception as e:
+        # 여기서 발생하는 예외는 create_image 함수 내부에서 발생한 예외를 처리합니다.
+        raise HTTPException(status_code=500, detail=f"Image creation request failed: {str(e)}")
+
+    image_data = await check_image_status(creation_response['data']['id'])
+
+    local_original_image_path_list = []
+    for image_url in image_data:
+        unique_filename = f"{uuid.uuid4()}.png"
+        local_path = f"temp/{unique_filename}"
+        await download_image_async(image_url, local_path)
+        local_original_image_path_list.append(local_path)
+
+    uploaded_urls = await upload_images_to_azure(local_original_image_path_list)
+
+    return {"uploaded_image_urls": uploaded_urls, "message": "Images uploaded successfully."}
 
 
 @router.put('/update/{gree_id}', response_model=SuccessMessage)
