@@ -4,7 +4,7 @@ import shutil
 from typing import List
 from animated_drawings import render
 
-from fastapi import Depends, HTTPException, APIRouter, File, UploadFile
+from fastapi import Depends, HTTPException, APIRouter, File, UploadFile, Body
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from concurrent.futures import ProcessPoolExecutor
@@ -57,12 +57,17 @@ class SuccessMessage(BaseModel):
     message: str
 
 
+class ImageRequest(BaseModel):
+    promptSelect: int
+
 @router.post("/generate-and-upload-image/{gree_id}")
 async def generate_and_upload_image(
         gree_id: int,
-        promptSelect: int,
+        image_request: ImageRequest = Body(...),
         current_user: Member = Depends(get_current_user),
         db: AsyncSession = Depends(get_db)):
+
+    promptSelect = image_request.promptSelect
 
     gree = await crud_get_gree_by_id(db, gree_id=gree_id, user_id=current_user.id)
     if not gree:
