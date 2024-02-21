@@ -6,9 +6,11 @@ import openai
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from azure.storage.blob import BlobServiceClient, ContentSettings
+from sqlalchemy.future import select
 
 from app.crud.crud_gree import crud_get_gree_by_id_only
 from app.models.enums import VoiceTypeEnum
+from app.models.models import Log
 from app.schemas.ChatDto import ChatRequestDto
 from app.schemas.LogDto import CreateGreeTalkLogDto, CreateUserTalkLogDto
 from app.services.log_service import create_greetalk_log_service, create_usertalk_log_service
@@ -75,6 +77,13 @@ async def chat_with_openai_service(db: AsyncSession, chat_request: ChatRequestDt
         
         f"당신은 {gree.prompt_gender}, {gree.prompt_age}살, 이름은 {gree.gree_name}, MBTI는 각각의 성향이 강하게 나타나는 {gree.prompt_mbti}입니다."
     )
+
+    result = await db.execute(select(Log).filter(Log.gree_id == chat_request.gree_id))
+    contents = [log_entry.content for log_entry in result.scalars().all()]
+    for content in contents:
+        system_message += content + ' '
+    
+    print(f'system_message = {system_message}')
 
     createUserLogDto = CreateUserTalkLogDto(
         gree_id=gree.id,
