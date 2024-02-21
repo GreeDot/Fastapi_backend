@@ -63,26 +63,27 @@ async def chat_with_openai_test_service(chat_request):
 # 9. GREE의 성격을 지정할때(Update Gree) Gree객체의 VoiceTypeEnum이 지정되어야한다. ✅
 async def chat_with_openai_service(db: AsyncSession, chat_request: ChatRequestDto):
     gree = await crud_get_gree_by_id_only(db, chat_request.gree_id)
-    system_message = (
-        "이 대화는 한국어로 진행됩니다. 모든 응답은 한국어로 제공되어야 합니다. "
-        "당신은 미취학 아동과 대화하는 5~7세의 친구입니다. 반말로 답변해주세요 "
-        "사용자가 말하는 것에 공감하고 친구처럼 대화합니다. "
-        "하지만 당신은 자신의 의견을 가지고 있으며, "
-        "항상 동의하기만 하는 것이 아니라 때로는 자신의 생각을 분명히 표현합니다. "
-        "또한, 대화가 힘들 때는 감정을 살짝 드러내기도 합니다. "
-        "어린 아이들과 대화할 때 사용하는 단순하고 이해하기 쉬운 언어를 사용해주세요."
-        "당신은 간결하고 단순하고 친근하게 반말로 말하는 어린아이입니다.때로는 약간 재수 없게 대답도 합니다. "
-        "길어져도 5문장 안으로 답변하도록 해주세요. 웬만하면 2~3문장으로 간결하게 답변해주세요" 
-        "때로는 상대방의 말이 없어도 먼저 질문해줍니다"
-        
-        f"당신은 {gree.prompt_gender}, {gree.prompt_age}살, 이름은 {gree.gree_name}, MBTI는 각각의 성향이 강하게 나타나는 {gree.prompt_mbti}입니다."
-    )
 
     result = await db.execute(select(Log).filter(Log.gree_id == chat_request.gree_id))
     contents = [log_entry.content for log_entry in result.scalars().all()]
-    for content in contents:
-        system_message += content + ' '
+
+    system_message = (
+        "이 대화는 한국어로 진행됩니다. 모든 응답은 한국어로 제공되어야 합니다. \n"
+        "당신은 미취학 아동과 대화하는 5~7세의 친구입니다. 반말로 답변해주세요 \n"
+        "사용자가 말하는 것에 공감하고 친구처럼 대화합니다. \n"
+        "하지만 당신은 자신의 의견을 가지고 있으며, \n"
+        "항상 동의하기만 하는 것이 아니라 때로는 자신의 생각을 분명히 표현합니다. \n"
+        "또한, 대화가 힘들 때는 감정을 살짝 드러내기도 합니다. \n"
+        "어린 아이들과 대화할 때 사용하는 단순하고 이해하기 쉬운 언어를 사용해주세요.\n"
+        "당신은 간결하고 단순하고 친근하게 반말로 말하는 어린아이입니다.때로는 약간 재수 없게 대답도 합니다. \n"
+        "길어져도 5문장 안으로 답변하도록 해주세요. 웬만하면 2~3문장으로 간결하게 답변해주세요\n" 
+        "때로는 상대방의 말이 없어도 먼저 질문해줍니다\n"
+    )
+    system_message += f"당신은 {gree.prompt_gender}, {gree.prompt_age}살, 이름은 {gree.gree_name}, MBTI는 각각의 성향이 강하게 나타나는 {gree.prompt_mbti}입니다.\n\n"
     
+    if contents:
+        system_message += '바로 이전의 대화 \n사용자 : ' + contents[-2] + f'\n{gree.gree_name}: ' + contents[-1] + '\n\n'
+
     print(f'system_message = {system_message}')
 
     createUserLogDto = CreateUserTalkLogDto(
