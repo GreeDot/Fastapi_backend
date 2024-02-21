@@ -1,3 +1,4 @@
+import urllib.request
 import os
 import uuid
 import aiohttp
@@ -97,7 +98,9 @@ async def chat_with_openai_service(db: AsyncSession, chat_request: ChatRequestDt
         )
         gree_talk= completion.choices[0].message.content
 
-        mp3_path = await text_to_speech(gree.voice_type, gree_talk)
+        print(f'gree_talk = {gree_talk}')
+
+        mp3_path = await text_to_speech_naver(gree.voice_type, gree_talk)
         voice_url_azure= await upload_mp3_azure(mp3_path)
 
         createGptLogDto = CreateGreeTalkLogDto(
@@ -147,7 +150,39 @@ async def text_to_speech(voice_type: VoiceTypeEnum, gree_talk: str) -> str:
                 return mp3_path
             else:
                 return "Error: 응답 상태가 200이 아닙니다."
-            
+
+async def text_to_speech_naver(voice_type: VoiceTypeEnum, text: str) -> str:
+    client_id = os.getenv('NAVER_CLIENT_ID')  # 환경변수에서 클라이언트 ID를 가져옵니다.
+    client_secret = os.getenv('NAVER_CLIENT_SECRET')  # 환경변수에서 클라이언트 비밀을 가져옵니다.
+    encText = urllib.parse.quote(text)
+    data = f"speaker={voice_type.value}&volume=0&speed=0&pitch=0&format=mp3&text=" + encText
+    url = "https://naveropenapi.apigw.ntruss.com/tts-premium/v1/tts"
+
+
+    headers = {
+        "X-NCP-APIGW-API-KEY-ID": client_id,
+        "X-NCP-APIGW-API-KEY": client_secret,
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url, data=data.encode('utf-8'), headers=headers) as response:
+            if response.status == 200:
+                content = await response.read()
+                
+                # 지정된 경로에 디렉토리가 없으면 생성
+                dir_path = '/temp/voice_temp/'
+                if not os.path.exists(dir_path):
+                    os.makedirs(dir_path)
+                
+                # 파일 저장 경로 변경
+                mp3_path = os.path.join(dir_path, f'{voice_type.value}_speech.mp3')
+                
+                with open(mp3_path, 'wb') as f:
+                    f.write(content)
+                return mp3_path
+            else:
+                return "Error: 응답 상태가 200이 아닙니다."
 
 async def upload_mp3_azure(mp3_path: str) -> str:
     try:

@@ -16,6 +16,7 @@ import aiofiles
 import uuid
 
 from app.schemas.greeFileDto import GreeFileSchema
+from app.services.gree_update_service import update_gree_voice_type
 from app.services.image_service import create_image, check_image_status, upload_images_to_azure
 from app.services.upload_service import upload_file_to_azure, upload_greefile_to_azure, \
     upload_yaml_to_azure_blob, upload_gif_to_azure_blob
@@ -106,6 +107,8 @@ async def update_gree(gree_id: int, gree_update: GreeUpdate, current_user: Membe
     gree = await crud_get_gree_by_id(db, gree_id=gree_id, user_id=user.id)
     if not gree:
         raise HTTPException(status_code=404, detail="Gree not found")
+
+    await update_gree_voice_type(db, gree_id, gree_update)
 
     updated_gree = await crud_update_gree(db, gree_id, gree_update)
     return {"message": "Gree updated successfully"}

@@ -35,7 +35,7 @@ class Gree(Base):
     status = Column(Enum(StatusEnum))
     isFavorite = Column(Boolean, default=False)
     # 그리는 프롬프트 엔지니어링을 통해 다음과 같이 TTS의 목소리가 결정되어야한다.
-    voice_type = Column(Enum(VoiceTypeEnum), default=VoiceTypeEnum.ALLOY)
+    voice_type = Column(Enum(VoiceTypeEnum), default=VoiceTypeEnum.NWOOF)
     register_at = Column(DateTime, nullable=False, default=datetime.now())
 
     member = relationship("Member", back_populates="gree")
