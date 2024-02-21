@@ -18,24 +18,12 @@ connection_string = f'DefaultEndpointsProtocol=https;AccountName=greedotstorage;
 
 promptDict = {
     1: """
-    please make cute
-    This picture was painted by a child.
-    Please change this picture a little bit more cute.
-    I want to keep most of the original.
-    Arms and legs must be in the form of characters.
-    Please don't put your face and body in.
-    I just wish I had one character.
-    And the parts other than the character outline must be a white background, so please make this important.
+    please make cute.
+Create a unique and cool character, inspired by a child's painting, with a focus on making the design slightly more cute while preserving the essence of the original. The character should be simplified, featuring distinct arms and legs without including a detailed face or body. Ensure the character is singular, with no additional characters present. It's crucial that everything outside the character's clear outline is set against a pure white background. This specification is essential as the image will be used for character outline segmentation. Avoid adding any shadows or extraneous elements around the character to maintain simplicity and focus on the character's silhouette.
     """,
     2: """
-    please make cool
-    This picture was painted by a child.
-    Please change this picture a little bit more cute.
-    I want to keep most of the original.
-    Arms and legs must be in the form of characters.
-    Please don't put your face and body in.
-    I just wish I had one character.
-    And the parts other than the character outline must be a white background, so please make this important.
+    please make cool.
+Create a unique and cool character, inspired by a child's painting, with a focus on making the design slightly more cute while preserving the essence of the original. The character should be simplified, featuring distinct arms and legs without including a detailed face or body. Ensure the character is singular, with no additional characters present. It's crucial that everything outside the character's clear outline is set against a pure white background. This specification is essential as the image will be used for character outline segmentation. Avoid adding any shadows or extraneous elements around the character to maintain simplicity and focus on the character's silhouette.
     """
 }
 
