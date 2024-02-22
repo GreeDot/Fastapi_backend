@@ -1,5 +1,5 @@
 # app/models/models.py
-from sqlalchemy import Column, Integer, String, DateTime, Enum, ForeignKey, Boolean
+from sqlalchemy import JSON, Column, Integer, String, DateTime, Enum, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from app.models.enums import RoleEnum, StatusEnum, GradeEnum, LogTypeEnum, FileTypeEnum, VoiceTypeEnum
@@ -35,7 +35,7 @@ class Gree(Base):
     status = Column(Enum(StatusEnum))
     isFavorite = Column(Boolean, default=False)
     # 그리는 프롬프트 엔지니어링을 통해 다음과 같이 TTS의 목소리가 결정되어야한다.
-    voice_type = Column(Enum(VoiceTypeEnum), default=VoiceTypeEnum.ALLOY)
+    voice_type = Column(Enum(VoiceTypeEnum), default=VoiceTypeEnum.NWOOF)
     register_at = Column(DateTime, nullable=False, default=datetime.now())
 
     member = relationship("Member", back_populates="gree")
@@ -76,9 +76,18 @@ class EmotionReport(Base):
 
     id = Column('emotion_report_id', Integer, primary_key=True, autoincrement=True)
     gree_id = Column(Integer, ForeignKey('gree.gree_id'), nullable=False)
-    content = Column(String(255))
-    emotion_type = Column(Enum(LogTypeEnum), nullable=False)
-    talk = Column(String(255))
     register_at = Column(DateTime, nullable=False, default=datetime.now())
 
     gree = relationship("Gree", back_populates="emotion_report")
+    emotion_details = relationship("EmotionDetail", back_populates="emotion_report", cascade="all, delete, delete-orphan")
+
+class EmotionDetail(Base):
+    __tablename__ = 'emotion_detail'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    emotion_report_id = Column(Integer, ForeignKey('emotion_report.emotion_report_id'), nullable=False)
+    emotion_type = Column(String(255), nullable=False)
+    sentences = Column(JSON, nullable=False)  # 문장 배열을 JSON 형식으로 저장
+    wordcloud_url = Column(String(255), nullable=True)  # URL은 옵셔널
+
+    emotion_report = relationship("EmotionReport", back_populates="emotion_details")

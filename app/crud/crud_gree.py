@@ -3,7 +3,7 @@ from typing import List, Optional
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.models import Gree as GreeModel
-from app.schemas.gree import GreeUpdate
+from app.schemas.greeDto import GreeUpdate
 
 async def crud_update_gree(db: AsyncSession, gree_id: int, gree_update: GreeUpdate) -> GreeModel:
     async with db as session:
@@ -21,8 +21,8 @@ async def crud_update_gree(db: AsyncSession, gree_id: int, gree_update: GreeUpda
 
 async def crud_get_grees(db: AsyncSession, user_id: int) -> List[GreeModel]:
     async with db as session:
-        query = select(GreeModel).filter(GreeModel.member_id == user_id, GreeModel.status == "activate")
-        result = await session.execute(query)
+        query = select(GreeModel).where(GreeModel.member_id == user_id, GreeModel.gree_name.isnot(None))
+        result = await db.execute(query)
         grees = result.scalars().all()
         return grees
 

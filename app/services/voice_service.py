@@ -1,3 +1,4 @@
+import urllib.request
 import os
 import uuid
 import aiohttp
@@ -5,9 +6,11 @@ import openai
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from azure.storage.blob import BlobServiceClient, ContentSettings
+from sqlalchemy.future import select
 
 from app.crud.crud_gree import crud_get_gree_by_id_only
 from app.models.enums import VoiceTypeEnum
+from app.models.models import Log
 from app.schemas.ChatDto import ChatRequestDto
 from app.schemas.LogDto import CreateGreeTalkLogDto, CreateUserTalkLogDto
 from app.services.log_service import create_greetalk_log_service, create_usertalk_log_service
@@ -54,26 +57,34 @@ async def chat_with_openai_test_service(chat_request):
 # 3. 즉 엔드포인트에서 받아야 할 정보는 gree_id, message 이 둘이면 된다. ✅
 # 4. gree_id, message로 입력받은 것은 "USER_TALK" Log로 남아야 한다. ✅
 # 5. gree_id, message로 출력되는 것은 "GREE_TALK" Log로 데이터베이스에 저장되어야 한다. ✅
-# 6. "GREE_TALK" 메시지는 TTS과정을 거쳐야한다.
-# 7. TTS를 거친 메시지는 Azure에 저장되어야한다.
-# 8. Azure에 저장된 URL은 Log에 저장되어야한다.
-# 9. GREE의 성격을 지정할때(Update Gree) Gree객체의 VoiceTypeEnum이 지정되어야한다.
+# 6. "GREE_TALK" 메시지는 TTS과정을 거쳐야한다. ✅
+# 7. TTS를 거친 메시지는 Azure에 저장되어야한다. ✅
+# 8. Azure에 저장된 URL은 Log에 저장되어야한다. ✅
+# 9. GREE의 성격을 지정할때(Update Gree) Gree객체의 VoiceTypeEnum이 지정되어야한다. ✅
 async def chat_with_openai_service(db: AsyncSession, chat_request: ChatRequestDto):
     gree = await crud_get_gree_by_id_only(db, chat_request.gree_id)
+
+    result = await db.execute(select(Log).filter(Log.gree_id == chat_request.gree_id))
+    contents = [log_entry.content for log_entry in result.scalars().all()]
+
     system_message = (
-        "이 대화는 한국어로 진행됩니다. 모든 응답은 한국어로 제공되어야 합니다. "
-        "당신은 미취학 아동과 대화하는 5~7세의 친구입니다. 반말로 답변해주세요 "
-        "사용자가 말하는 것에 공감하고 친구처럼 대화합니다. "
-        "하지만 당신은 자신의 의견을 가지고 있으며, "
-        "항상 동의하기만 하는 것이 아니라 때로는 자신의 생각을 분명히 표현합니다. "
-        "또한, 대화가 힘들 때는 감정을 살짝 드러내기도 합니다. "
-        "어린 아이들과 대화할 때 사용하는 단순하고 이해하기 쉬운 언어를 사용해주세요."
-        "당신은 간결하고 단순하고 친근하게 반말로 말하는 어린아이입니다.때로는 약간 재수 없게 대답도 합니다. "
-        "길어져도 5문장 안으로 답변하도록 해주세요. 웬만하면 2~3문장으로 간결하게 답변해주세요" 
-        "때로는 상대방의 말이 없어도 먼저 질문해줍니다"
-        
-        f"당신은 {gree.prompt_gender}, {gree.prompt_age}살, 이름은 {gree.gree_name}, MBTI는 각각의 성향이 강하게 나타나는 {gree.prompt_mbti}입니다."
+        "이 대화는 한국어로 진행됩니다. 모든 응답은 한국어로 제공되어야 합니다. \n"
+        "당신은 미취학 아동과 대화하는 5~7세의 친구입니다. 반말로 답변해주세요 \n"
+        "사용자가 말하는 것에 공감하고 친구처럼 대화합니다. \n"
+        "하지만 당신은 자신의 의견을 가지고 있으며, \n"
+        "항상 동의하기만 하는 것이 아니라 때로는 자신의 생각을 분명히 표현합니다. \n"
+        "또한, 대화가 힘들 때는 감정을 살짝 드러내기도 합니다. \n"
+        "어린 아이들과 대화할 때 사용하는 단순하고 이해하기 쉬운 언어를 사용해주세요.\n"
+        "당신은 간결하고 단순하고 친근하게 반말로 말하는 어린아이입니다.때로는 약간 재수 없게 대답도 합니다. \n"
+        "길어져도 5문장 안으로 답변하도록 해주세요. 웬만하면 2~3문장으로 간결하게 답변해주세요\n" 
+        "때로는 상대방의 말이 없어도 먼저 질문해줍니다\n"
     )
+    system_message += f"당신은 {gree.prompt_gender}, {gree.prompt_age}살, 이름은 {gree.gree_name}, MBTI는 각각의 성향이 강하게 나타나는 {gree.prompt_mbti}입니다.\n\n"
+    
+    if contents:
+        system_message += '바로 이전의 대화 \n사용자 : ' + contents[-2] + f'\n{gree.gree_name}: ' + contents[-1] + '\n\n'
+
+    print(f'system_message = {system_message}')
 
     createUserLogDto = CreateUserTalkLogDto(
         gree_id=gree.id,
@@ -85,7 +96,7 @@ async def chat_with_openai_service(db: AsyncSession, chat_request: ChatRequestDt
 
     try:
         completion = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model="ft:gpt-3.5-turbo-0613:personal::8sn4jyEw",
             temperature=1.5,
             top_p=0.7,
             frequency_penalty=0.3,
@@ -97,7 +108,9 @@ async def chat_with_openai_service(db: AsyncSession, chat_request: ChatRequestDt
         )
         gree_talk= completion.choices[0].message.content
 
-        mp3_path = await text_to_speech(gree.voice_type, gree_talk)
+        print(f'gree_talk = {gree_talk}')
+
+        mp3_path = await text_to_speech_naver(gree.voice_type, gree_talk)
         voice_url_azure= await upload_mp3_azure(mp3_path)
 
         createGptLogDto = CreateGreeTalkLogDto(
@@ -147,7 +160,39 @@ async def text_to_speech(voice_type: VoiceTypeEnum, gree_talk: str) -> str:
                 return mp3_path
             else:
                 return "Error: 응답 상태가 200이 아닙니다."
-            
+
+async def text_to_speech_naver(voice_type: VoiceTypeEnum, text: str) -> str:
+    client_id = os.getenv('NAVER_CLIENT_ID')  # 환경변수에서 클라이언트 ID를 가져옵니다.
+    client_secret = os.getenv('NAVER_CLIENT_SECRET')  # 환경변수에서 클라이언트 비밀을 가져옵니다.
+    encText = urllib.parse.quote(text)
+    data = f"speaker={voice_type.value}&volume=0&speed=0&pitch=0&format=mp3&text=" + encText
+    url = "https://naveropenapi.apigw.ntruss.com/tts-premium/v1/tts"
+
+
+    headers = {
+        "X-NCP-APIGW-API-KEY-ID": client_id,
+        "X-NCP-APIGW-API-KEY": client_secret,
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url, data=data.encode('utf-8'), headers=headers) as response:
+            if response.status == 200:
+                content = await response.read()
+                
+                # 지정된 경로에 디렉토리가 없으면 생성
+                dir_path = '/temp/voice_temp/'
+                if not os.path.exists(dir_path):
+                    os.makedirs(dir_path)
+                
+                # 파일 저장 경로 변경
+                mp3_path = os.path.join(dir_path, f'{voice_type.value}_speech.mp3')
+                
+                with open(mp3_path, 'wb') as f:
+                    f.write(content)
+                return mp3_path
+            else:
+                return "Error: 응답 상태가 200이 아닙니다."
 
 async def upload_mp3_azure(mp3_path: str) -> str:
     try:

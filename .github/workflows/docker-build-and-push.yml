@@ -29,17 +29,17 @@ jobs:
     - name: Deploy to EC2
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USERNAME }}
-        key: ${{ secrets.EC2_SSH_KEY }}
+        host: ${{ secrets.AZURE_HOST }}
+        username: ${{ secrets.AZURE_USERNAME }}
+        key: ${{ secrets.AZURE_KEY }}
         script: |
-          bash /home/ec2-user/update-docker.sh
+          sudo bash /home/gosu/mainserver/update-docker.sh
 
     - name: Cleanup Dangling Docker Images
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USERNAME }}
-        key: ${{ secrets.EC2_SSH_KEY }}
+        host: ${{ secrets.AZURE_HOST }}
+        username: ${{ secrets.AZURE_USERNAME }}
+        key: ${{ secrets.AZURE_KEY }}
         script: |
-          docker images -q -f dangling=true | xargs docker rmi
+          sudo docker images -q -f dangling=true | sudo xargs docker rmi

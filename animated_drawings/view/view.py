@@ -39,9 +39,12 @@ class View:
     def create_view(view_cfg: ViewConfig) -> View:
         """ Takes in a view dictionary from mvc config file and returns the appropriate view. """
         # create view
-        if view_cfg.use_mesa:
-            from animated_drawings.view.mesa_view import MesaView
-            return MesaView(view_cfg)
-        else:
-            from animated_drawings.view.window_view import WindowView
-            return WindowView(view_cfg)
+        #위에는 linux 아래는 window
+        # if view_cfg.use_mesa:
+        from animated_drawings.view.mesa_view import MesaView
+        return MesaView(view_cfg)
+        # else:
+        #     from animated_drawings.view.window_view import WindowView
+        #     return WindowView(view_cfg)
+
+
