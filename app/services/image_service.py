@@ -15,20 +15,62 @@ MID_API_KEY = os.getenv('MID_API_KEY')
 container_name = "greefile"
 AZURE_ACCOUNT_KEY = os.getenv("AZURE_ACCOUNT_KEY")
 connection_string = f'DefaultEndpointsProtocol=https;AccountName=greedotstorage;AccountKey={AZURE_ACCOUNT_KEY};EndpointSuffix=core.windows.net'
-
 promptDict = {
     1: """
-    please make cute.
-Create a unique and cool character, inspired by a child's painting, with a focus on making the design slightly more cute while preserving the essence of the original. The character should be simplified, featuring distinct arms and legs without including a detailed face or body. Ensure the character is singular, with no additional characters present. It's crucial that everything outside the character's clear outline is set against a pure white background. This specification is essential as the image will be used for character outline segmentation. Avoid adding any shadows or extraneous elements around the character to maintain simplicity and focus on the character's silhouette.
+    **normal**
+    please make cute This picture was painted by a child. 
+    Please change this picture a little bit more cute. 
+    I want to keep most of the original. 
+    Arms and legs must be in the form of characters. 
+    Please don't put your face and body in. I just wish I had one character. 
+    And the parts other than the character outline must be a white background, so please make this important. 
+    transparent png download, 
+    --no background, shadow, surrounding friend, surrounding objects
+    --quality 0.5
     """,
     2: """
-    please make cool.
-Create a unique and cool character, inspired by a child's painting, with a focus on making the design slightly more cute while preserving the essence of the original. The character should be simplified, featuring distinct arms and legs without including a detailed face or body. Ensure the character is singular, with no additional characters present. It's crucial that everything outside the character's clear outline is set against a pure white background. This specification is essential as the image will be used for character outline segmentation. Avoid adding any shadows or extraneous elements around the character to maintain simplicity and focus on the character's silhouette.
+    **sketch**
+    in the style of childs drawing, 
+    transparent png download, 
+    simple, 
+    cute and colorful, 
+    hd,
+    full body shot,
+    wearing shoes,
+    --no background, shadow, surrounding friend, surrounding objects
+    --quality 0.5
+    --stylize 50
+    """,
+    3: """
+    **anime**
+    anime,
+    transparent png download, 
+    simple, 
+    cute and colorful, 
+    hd,
+    full body shot,
+    wearing shoes,
+    --no background, shadow, surrounding friend, surrounding objects
+    --quality 0.5
+    """,
+    4: """
+    **dizney**
+    Disney style,
+    3d animation, 
+    transparent png download, 
+    simple, 
+    cute and colorful, 
+    hd,
+    full body shot,
+    wearing shoes,
+    --no background, shadow, surrounding friend, surrounding objects
     """
 }
 
 async def create_image(promptSelect: int, raw_img_url: str) -> dict:
-    prompt = promptDict[promptSelect] + "\n" + raw_img_url
+    prompt = raw_img_url + ' '
+    prompt += promptDict[promptSelect]
+    
     headers = {
         'Authorization': f'Bearer {MID_API_KEY}',
         'Content-Type': 'application/json'

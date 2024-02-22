@@ -302,7 +302,7 @@ async def create_and_upload_assets(
     texture_file_path = os.path.join(base_path, 'texture.png')
     await download_and_save_file(gree.raw_img, texture_file_path)
 
-    gif_list = ['dab', 'walk', 'wave', 'bounce']
+    gif_list = ['walk', 'lay', 'wow', 'dab', 'jump', '']
 
     gif_paths = await run_create_gif(gif_list)
 
