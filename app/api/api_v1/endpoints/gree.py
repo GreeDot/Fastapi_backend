@@ -32,6 +32,7 @@ from animated_drawings import render
 
 router = APIRouter()
 
+
 @router.post('/upload-raw-img')
 async def upload_raw_img(
         file: UploadFile = File(...),
@@ -45,7 +46,7 @@ async def upload_raw_img(
         raw_img=file_url,
         member_id=member_id,
         isFavorite=False,
-        status= "activate"
+        status="activate"
     )
     db.add(gree_data)
     await db.commit()  # 커밋하여 트랜잭션을 완료
@@ -61,13 +62,13 @@ class SuccessMessage(BaseModel):
 class ImageRequest(BaseModel):
     promptSelect: int
 
+
 @router.post("/generate-and-upload-image/{gree_id}")
 async def generate_and_upload_image(
         gree_id: int,
         image_request: ImageRequest = Body(...),
         current_user: Member = Depends(get_current_user),
         db: AsyncSession = Depends(get_db)):
-
     promptSelect = image_request.promptSelect
 
     gree = await crud_get_gree_by_id(db, gree_id=gree_id, user_id=current_user.id)
@@ -99,7 +100,6 @@ async def generate_and_upload_image(
 @router.put('/update/{gree_id}', response_model=SuccessMessage)
 async def update_gree(gree_id: int, gree_update: GreeUpdate, current_user: Member = Depends(get_current_user),
                       db: AsyncSession = Depends(get_db)):
-
     user = await crud_get_user(db, current_user.id)
     if not user:
         raise HTTPException(status_code=401, detail="Invalid or expired token")
@@ -136,7 +136,6 @@ async def read_gree(gree_id: int, current_user: Member = Depends(get_current_use
 @router.put('/disable/{gree_id}', response_model=SuccessMessage)
 async def disable_gree(gree_id: int, current_user: Member = Depends(get_current_user),
                        db: AsyncSession = Depends(get_db)):
-
     user = await crud_get_user(db, current_user.id)
     if not user:
         raise HTTPException(status_code=401, detail="Invalid or expired token")
@@ -144,7 +143,6 @@ async def disable_gree(gree_id: int, current_user: Member = Depends(get_current_
     await crud_update_gree_status(db, gree_id=gree_id, user_id=user.id, new_status="DISABLED")
 
     return {"message": "Gree disabled successfully"}
-
 
 
 async def download_image_async(image_url: str, local_file_path: str):
@@ -159,7 +157,6 @@ async def download_image_async(image_url: str, local_file_path: str):
 
 
 async def download_and_save_file(url: str, destination: str):
-
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
             if response.status == 200:
@@ -247,6 +244,7 @@ async def upload_yaml(
 
     return {"message": "YAML file uploaded successfully", "url": file_url}
 
+
 def create_gif_wrapper(options):
     results = []
     for option in options:
@@ -254,9 +252,11 @@ def create_gif_wrapper(options):
         results.append(result)
     return results
 
+
 def create_gif(option):
     render.start(f'AnimatedDrawings/examples/config/mvc/gree_{option}.yaml')
     return f'./temp/{option}.gif'
+
 
 # 멀티프로세싱을 사용하여 GIF 생성
 async def run_create_gif(options):
@@ -266,12 +266,12 @@ async def run_create_gif(options):
         results = await asyncio.gather(*futures)
     return results
 
+
 @router.post("/create-and-upload-assets/{gree_id}")
 async def create_and_upload_assets(
         gree_id: int,
         current_user: Member = Depends(get_current_user),
         db: AsyncSession = Depends(get_db)):
-
     gree_result = await db.execute(select(SQLAlchemyGree).where(SQLAlchemyGree.id == gree_id))
     gree = gree_result.scalars().first()
     if not gree:
@@ -305,13 +305,12 @@ async def create_and_upload_assets(
     texture_file_path = os.path.join(base_path, 'texture.png')
     await download_and_save_file(gree.raw_img, texture_file_path)
 
-    gif_list = ['walk', 'dab','hello']
+    gif_list = ['walk', 'dab', 'hello', 'umpa', 'dance', 'jump', 'lay', 'scratch']
 
     gif_paths = await run_create_gif(gif_list)
 
     gif_url_list = []
     for idx, i in enumerate(gif_paths):
-
         uploaded_gif_url = await upload_gif_to_azure_blob(i)
 
         gif_url_list.append(uploaded_gif_url)
@@ -319,7 +318,7 @@ async def create_and_upload_assets(
         gree_file = GreeFile(
             gree_id=gree_id,
             file_type='GIF',
-            file_name= gif_list[idx],
+            file_name=gif_list[idx],
             real_name=uploaded_gif_url,
         )
         db.add(gree_file)
@@ -329,9 +328,9 @@ async def create_and_upload_assets(
     return {"message": "Assets and GIF uploaded successfully", "gif_url": gif_url_list}
 
 
-
 @router.get("/getgif/{gree_id}", response_model=List[GreeFileSchema])
-async def read_gree_gifs(gree_id: int, current_user: Member = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+async def read_gree_gifs(gree_id: int, current_user: Member = Depends(get_current_user),
+                         db: AsyncSession = Depends(get_db)):
     async with db as session:
         result = await session.execute(
             select(GreeFile)
