@@ -4,7 +4,7 @@ import shutil
 from typing import List
 from animated_drawings import render
 
-from fastapi import Depends, HTTPException, APIRouter, File, UploadFile, Body
+from fastapi import Depends, HTTPException, APIRouter, File, UploadFile, Body, Response
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from concurrent.futures import ProcessPoolExecutor
@@ -115,8 +115,9 @@ async def update_gree(gree_id: int, gree_update: GreeUpdate, current_user: Membe
 
 
 @router.get('/view', response_model=List[Gree])
-async def read_grees(current_user: Member = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+async def read_grees(response: Response, current_user: Member = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
     grees = await crud_get_grees(db, user_id=current_user.id)
+    response.headers['Content-Type'] = 'application/json; charset=utf-8'
     return grees
 
 
