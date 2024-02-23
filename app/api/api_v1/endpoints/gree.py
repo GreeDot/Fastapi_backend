@@ -293,7 +293,7 @@ async def create_and_upload_assets(
     if not gree_img_file:
         raise HTTPException(status_code=404, detail="Image file not found")
 
-    base_path = 'AnimatedDrawings/examples/characters/char7'
+    base_path = 'AnimatedDrawings/examples/characters/GreeChar'
     os.makedirs(base_path, exist_ok=True)
 
     yaml_file_path = os.path.join(base_path, 'char_cfg.yaml')
@@ -305,7 +305,7 @@ async def create_and_upload_assets(
     texture_file_path = os.path.join(base_path, 'texture.png')
     await download_and_save_file(gree.raw_img, texture_file_path)
 
-    gif_list = ['walk', 'lay', 'wow', 'dab', 'jump', '']
+    gif_list = ['walk', 'lay', 'wow', 'dab', 'jump', 'hello', 'umpa', 'scratch', 'dance']
 
     gif_paths = await run_create_gif(gif_list)
 
