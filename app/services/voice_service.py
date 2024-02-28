@@ -80,9 +80,6 @@ async def chat_with_openai_service(db: AsyncSession, chat_request: ChatRequestDt
         "때로는 상대방의 말이 없어도 먼저 질문해줍니다\n"
     )
     system_message += f"당신은 {gree.prompt_gender}, {gree.prompt_age}살, 이름은 {gree.gree_name}, MBTI는 각각의 성향이 강하게 나타나는 {gree.prompt_mbti}입니다.\n\n"
-    
-    if contents:
-        system_message += '바로 이전의 대화 \n사용자 : ' + contents[-2] + f'\n{gree.gree_name}: ' + contents[-1] + '\n\n'
 
     print(f'system_message = {system_message}')
 
