@@ -7,5 +7,5 @@ forward_perp_joint_vectors:
     - RightShoulder
   - - LeftUpLeg
     - RightUpLeg
-scale: 0.005
+scale: 0.05
 up: +y
