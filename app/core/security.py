@@ -42,11 +42,11 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=15)  # 예시: 15분 후 만료
+        expire = datetime.utcnow() + timedelta(minutes=150)  # 예시: 15분 후 만료
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
-    expires_in = expires_delta.total_seconds() if expires_delta else 15 * 60  # 예시 값
+    expires_in = expires_delta.total_seconds() if expires_delta else 150 * 60  # 예시 값
 
     return Token(
         access_token=encoded_jwt,
